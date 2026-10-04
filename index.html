@@ -2,212 +2,171 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Racing Game + Geometry Dash</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>My Games</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    user-select: none;
+*{
+    box-sizing:border-box;
+    user-select:none;
 }
 
-body {
-    margin: 0;
-    background: #111;
-    color: white;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    overflow-x: hidden;
+body{
+    margin:0;
+    background:#111;
+    color:white;
+    font-family:Arial,sans-serif;
+    text-align:center;
 }
 
-h1 {
-    margin: 20px 0 8px;
-    font-size: 42px;
+.screen{
+    display:none;
 }
 
-#app {
-    width: 100%;
-    max-width: 1100px;
-    margin: auto;
+.screen.active{
+    display:block;
 }
 
-.screen {
-    display: none;
+.menu{
+    max-width:750px;
+    margin:50px auto;
+    padding:35px;
+    background:#222;
+    border:2px solid #555;
+    border-radius:20px;
 }
 
-.screen.active {
-    display: block;
+h1{
+    font-size:45px;
+    margin:15px;
 }
 
-.menu-box {
-    margin: 40px auto;
-    padding: 30px;
-    max-width: 700px;
-    background: #222;
-    border-radius: 20px;
-    border: 2px solid #555;
+button{
+    border:0;
+    border-radius:12px;
+    padding:14px 25px;
+    margin:8px;
+    font-size:20px;
+    font-weight:bold;
+    cursor:pointer;
+    color:white;
+    background:#3498db;
 }
 
-button {
-    border: none;
-    border-radius: 12px;
-    padding: 15px 25px;
-    margin: 8px;
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    background: #3498db;
-    color: white;
+button:hover{
+    transform:scale(1.05);
 }
 
-button:hover {
-    transform: scale(1.05);
-    background: #2980b9;
+.easy{background:#27ae60}
+.medium{background:#f39c12}
+.hard{background:#e74c3c}
+
+canvas{
+    display:block;
+    margin:15px auto;
+    border:4px solid white;
+    border-radius:10px;
+    max-width:95vw;
 }
 
-.gameCanvas {
-    display: block;
-    margin: 15px auto;
-    border: 4px solid white;
-    border-radius: 10px;
-    max-width: 95vw;
-    background: #222;
+.info{
+    font-size:21px;
+    margin:8px;
 }
 
-.info {
-    font-size: 20px;
-    margin: 10px;
-}
-
-.small {
-    font-size: 15px;
-    color: #bbb;
-}
-
-.level-button {
-    width: 130px;
-    height: 60px;
-}
-
-.easy {
-    background: #27ae60;
-}
-
-.medium {
-    background: #f39c12;
-}
-
-.hard {
-    background: #e74c3c;
-}
-
-.game-title {
-    font-size: 32px;
-    margin-top: 20px;
+.small{
+    color:#aaa;
 }
 </style>
 </head>
 
 <body>
 
-<div id="app">
+<div id="home" class="screen active">
+    <div class="menu">
+        <h1>🎮 MY GAMES</h1>
+        <p class="info">Choose a game</p>
 
-    <!-- HOME -->
-    <div id="homeScreen" class="screen active">
-        <div class="menu-box">
-            <h1>MY GAMES</h1>
-            <p class="info">Choose a game</p>
+        <button onclick="openRaceMenu()">🏎️ RACING GAME</button>
+        <button onclick="openGeoMenu()">🎮 GEOMETRY DASH</button>
+    </div>
+</div>
 
-            <button onclick="openRacingMenu()">🏎️ RACING GAME</button>
-            <button onclick="openGeometryMenu()">🎮 GEOMETRY DASH</button>
-        </div>
+
+<div id="raceMenu" class="screen">
+    <div class="menu">
+        <h1>🏎️ RACING GAME</h1>
+
+        <p class="info">Choose difficulty</p>
+
+        <button class="easy" onclick="startRace('easy')">EASY</button>
+        <button class="medium" onclick="startRace('medium')">MEDIUM</button>
+        <button class="hard" onclick="startRace('hard')">HARD</button>
+
+        <br>
+
+        <button onclick="goHome()">HOME</button>
+    </div>
+</div>
+
+
+<div id="raceScreen" class="screen">
+
+    <h1>🏎️ RACING GAME</h1>
+
+    <div class="info">
+        TIME: <span id="raceTime">0</span>s
+        &nbsp;&nbsp;&nbsp;
+        SCORE: <span id="raceScore">0</span>
     </div>
 
+    <canvas id="raceCanvas" width="600" height="700"></canvas>
 
-    <!-- RACING MENU -->
-    <div id="racingMenu" class="screen">
-        <div class="menu-box">
-            <h1>RACING GAME</h1>
+    <button onclick="toggleRacePause()">PAUSE</button>
+    <button onclick="goHome()">HOME</button>
 
-            <p class="info">Choose difficulty</p>
-
-            <button class="easy" onclick="startRacing('easy')">EASY</button>
-            <button class="medium" onclick="startRacing('medium')">MEDIUM</button>
-            <button class="hard" onclick="startRacing('hard')">HARD</button>
-
-            <br>
-
-            <button onclick="goHome()">HOME</button>
-        </div>
-    </div>
+    <p class="small">
+        Move with LEFT / RIGHT or A / D
+    </p>
+</div>
 
 
-    <!-- RACING GAME -->
-    <div id="racingScreen" class="screen">
+<div id="geoMenu" class="screen">
 
-        <div class="game-title">🏎️ RACING GAME</div>
+    <div class="menu">
 
-        <div class="info">
-            TIME: <span id="raceTime">0</span>s
-        </div>
+        <h1>🎮 GEOMETRY DASH</h1>
 
-        <canvas id="raceCanvas"
-                class="gameCanvas"
-                width="600"
-                height="700"></canvas>
+        <p class="info">Choose a level</p>
 
-        <button onclick="pauseRacing()">PAUSE</button>
+        <div id="levels"></div>
+
+        <br>
+
         <button onclick="goHome()">HOME</button>
 
-        <p class="small">
-            Move with LEFT / RIGHT or A / D
-        </p>
     </div>
 
+</div>
 
-    <!-- GEOMETRY DASH MENU -->
-    <div id="geometryMenu" class="screen">
 
-        <div class="menu-box">
+<div id="geoScreen" class="screen">
 
-            <h1>GEOMETRY DASH</h1>
+    <h1>🎮 GEOMETRY DASH</h1>
 
-            <p class="info">Choose a level</p>
-
-            <div id="levelButtons"></div>
-
-            <br>
-
-            <button onclick="goHome()">HOME</button>
-
-        </div>
-
+    <div class="info">
+        TIME: <span id="geoTime">0</span>s
     </div>
 
+    <canvas id="geoCanvas" width="1000" height="600"></canvas>
 
-    <!-- GEOMETRY DASH GAME -->
-    <div id="geometryScreen" class="screen">
+    <button onclick="toggleGeoPause()">PAUSE</button>
+    <button onclick="openGeoMenu()">LEVELS</button>
+    <button onclick="goHome()">HOME</button>
 
-        <div class="game-title">🎮 GEOMETRY DASH</div>
-
-        <div class="info">
-            TIME: <span id="geoTime">0</span>s
-        </div>
-
-        <canvas id="geoCanvas"
-                class="gameCanvas"
-                width="1000"
-                height="600"></canvas>
-
-        <button onclick="pauseGeometry()">PAUSE</button>
-        <button onclick="openGeometryMenu()">LEVELS</button>
-        <button onclick="goHome()">HOME</button>
-
-        <p class="small">
-            SPACE / UP / W / CLICK = JUMP
-        </p>
-
-    </div>
+    <p class="small">
+        SPACE / UP / W / CLICK = JUMP
+    </p>
 
 </div>
 
@@ -215,32 +174,25 @@ button:hover {
 <script>
 
 /* =========================================================
-   GENERAL SCREEN SYSTEM
+   SCREEN SYSTEM
 ========================================================= */
 
-const screens = [
-    "homeScreen",
-    "racingMenu",
-    "racingScreen",
-    "geometryMenu",
-    "geometryScreen"
-];
+function showScreen(id){
 
-function showScreen(id) {
-
-    screens.forEach(function(screen) {
-        document.getElementById(screen).classList.remove("active");
+    document.querySelectorAll(".screen").forEach(function(s){
+        s.classList.remove("active");
     });
 
     document.getElementById(id).classList.add("active");
 }
 
-function goHome() {
 
-    stopRacing();
-    stopGeometry();
+function goHome(){
 
-    showScreen("homeScreen");
+    stopRace();
+    stopGeo();
+
+    showScreen("home");
 }
 
 
@@ -248,166 +200,157 @@ function goHome() {
    RACING GAME
 ========================================================= */
 
-const raceCanvas = document.getElementById("raceCanvas");
-const raceCtx = raceCanvas.getContext("2d");
+const raceCanvas =
+    document.getElementById("raceCanvas");
 
-let racing = false;
-let racePaused = false;
-let raceDifficulty = "easy";
+const rc =
+    raceCanvas.getContext("2d");
 
-let playerX = 270;
-let playerY = 590;
+let raceRunning=false;
+let racePaused=false;
 
-let raceStartTime = 0;
-let raceElapsed = 0;
+let raceDifficulty="easy";
 
-let roadOffset = 0;
+let playerX=270;
+let playerY=580;
 
-let raceKeys = {};
+let raceEnemies=[];
 
-let enemyCars = [];
+let raceStart=0;
+let raceElapsed=0;
+let raceScore=0;
 
-let spawnTimer = 0;
+let roadOffset=0;
+let spawnTimer=0;
 
-let raceAnimation;
-
-
-/* PLAYER */
-
-const playerCar = {
-    width: 60,
-    height: 100
-};
+let raceFrame;
 
 
-/* DIFFICULTIES */
+const raceSettings={
 
-const raceSettings = {
-
-    easy: {
-        speed: 4,
-        spawnRate: 110,
-        maxCars: 2
+    easy:{
+        speed:4,
+        spawn:100,
+        max:2
     },
 
-    medium: {
-        speed: 5,
-        spawnRate: 85,
-        maxCars: 3
+    medium:{
+        speed:5,
+        spawn:75,
+        max:3
     },
 
-    hard: {
-        speed: 7,
-        spawnRate: 60,
-        maxCars: 4
+    hard:{
+        speed:7,
+        spawn:50,
+        max:4
     }
 
 };
 
 
-/* OPEN RACING MENU */
-
-function openRacingMenu() {
-
-    stopGeometry();
-    stopRacing();
-
-    showScreen("racingMenu");
-}
+let raceKeys={};
 
 
-/* START RACING */
+document.addEventListener("keydown",function(e){
 
-function startRacing(difficulty) {
+    raceKeys[e.key.toLowerCase()]=true;
 
-    raceDifficulty = difficulty;
-
-    playerX = 270;
-    playerY = 590;
-
-    enemyCars = [];
-
-    spawnTimer = 0;
-
-    raceElapsed = 0;
-
-    raceStartTime = performance.now();
-
-    racePaused = false;
-    racing = true;
-
-    showScreen("racingScreen");
-
-    requestAnimationFrame(racingLoop);
-}
-
-
-/* STOP */
-
-function stopRacing() {
-
-    racing = false;
-    racePaused = false;
-
-    if (raceAnimation) {
-        cancelAnimationFrame(raceAnimation);
-    }
-}
-
-
-/* PAUSE */
-
-function pauseRacing() {
-
-    if (!racing) return;
-
-    racePaused = !racePaused;
-
-    if (!racePaused) {
-        raceStartTime = performance.now() - raceElapsed * 1000;
-        requestAnimationFrame(racingLoop);
-    }
-}
-
-
-/* KEYBOARD */
-
-document.addEventListener("keydown", function(e) {
-
-    raceKeys[e.key.toLowerCase()] = true;
-
-    if (
-        e.key === "ArrowLeft" ||
-        e.key === "ArrowRight" ||
-        e.key === " "
-    ) {
+    if(
+        e.key==="ArrowLeft" ||
+        e.key==="ArrowRight" ||
+        e.key===" "
+    ){
         e.preventDefault();
     }
 
 });
 
-document.addEventListener("keyup", function(e) {
 
-    raceKeys[e.key.toLowerCase()] = false;
+document.addEventListener("keyup",function(e){
+
+    raceKeys[e.key.toLowerCase()]=false;
 
 });
 
 
-/* SPAWN ENEMY */
+function openRaceMenu(){
 
-function spawnEnemy() {
+    stopRace();
+    stopGeo();
 
-    const settings = raceSettings[raceDifficulty];
+    showScreen("raceMenu");
+}
 
-    if (enemyCars.length >= settings.maxCars) {
-        return;
+
+function startRace(difficulty){
+
+    raceDifficulty=difficulty;
+
+    playerX=270;
+    playerY=580;
+
+    raceEnemies=[];
+
+    spawnTimer=0;
+
+    raceElapsed=0;
+    raceScore=0;
+
+    document.getElementById("raceTime").textContent="0";
+    document.getElementById("raceScore").textContent="0";
+
+    raceStart=performance.now();
+
+    raceRunning=true;
+    racePaused=false;
+
+    showScreen("raceScreen");
+
+    cancelAnimationFrame(raceFrame);
+
+    raceFrame=requestAnimationFrame(raceLoop);
+}
+
+
+function stopRace(){
+
+    raceRunning=false;
+    racePaused=false;
+
+    cancelAnimationFrame(raceFrame);
+}
+
+
+function toggleRacePause(){
+
+    if(!raceRunning)return;
+
+    racePaused=!racePaused;
+
+    if(!racePaused){
+
+        raceStart=
+            performance.now()-
+            raceElapsed*1000;
+
+        raceFrame=requestAnimationFrame(raceLoop);
     }
+}
 
-    const lanes = [165, 270, 375];
 
-    const lane = lanes[Math.floor(Math.random() * lanes.length)];
+function spawnRaceEnemy(){
 
-    const colors = [
+    let settings=raceSettings[raceDifficulty];
+
+    if(raceEnemies.length>=settings.max)return;
+
+    let lanes=[145,270,395];
+
+    let lane=
+        lanes[Math.floor(Math.random()*lanes.length)];
+
+    let colors=[
         "#e74c3c",
         "#3498db",
         "#f1c40f",
@@ -416,63 +359,55 @@ function spawnEnemy() {
         "#e67e22"
     ];
 
-    const color =
-        colors[Math.floor(Math.random() * colors.length)];
+    let color=
+        colors[Math.floor(Math.random()*colors.length)];
 
-    enemyCars.push({
-        x: lane,
-        y: -120,
-        width: 60,
-        height: 100,
-        speed: settings.speed * (0.8 + Math.random() * 0.5),
-        color: color
+    raceEnemies.push({
+
+        x:lane,
+        y:-120,
+
+        width:60,
+        height:100,
+
+        speed:
+            settings.speed*
+            (0.8+Math.random()*0.5),
+
+        color:color
     });
 }
 
 
-/* DRAW ROAD */
+function drawRoad(){
 
-function drawRaceRoad() {
+    rc.fillStyle="#16823b";
+    rc.fillRect(0,0,600,700);
 
-    raceCtx.fillStyle = "#202020";
-    raceCtx.fillRect(0, 0, 600, 700);
+    rc.fillStyle="#333";
+    rc.fillRect(100,0,400,700);
 
-    /* grass */
+    rc.fillStyle="white";
 
-    raceCtx.fillStyle = "#16823b";
+    rc.fillRect(100,0,6,700);
+    rc.fillRect(494,0,6,700);
 
-    raceCtx.fillRect(0, 0, 100, 700);
-    raceCtx.fillRect(500, 0, 100, 700);
+    for(
+        let y=-120;
+        y<700;
+        y+=120
+    ){
 
-    /* road */
-
-    raceCtx.fillStyle = "#333";
-
-    raceCtx.fillRect(100, 0, 400, 700);
-
-    /* road edges */
-
-    raceCtx.fillStyle = "#fff";
-
-    raceCtx.fillRect(100, 0, 6, 700);
-    raceCtx.fillRect(494, 0, 6, 700);
-
-    /* lane markings */
-
-    raceCtx.fillStyle = "#fff";
-
-    for (let y = -60; y < 700; y += 120) {
-
-        raceCtx.fillRect(
+        rc.fillRect(
             198,
-            y + roadOffset,
+            y+roadOffset,
             7,
             60
         );
 
-        raceCtx.fillRect(
+        rc.fillRect(
             396,
-            y + roadOffset,
+            y+roadOffset,
             7,
             60
         );
@@ -480,374 +415,300 @@ function drawRaceRoad() {
 }
 
 
-/* DRAW CAR */
+function drawCar(x,y,color,player){
 
-function drawRaceCar(x, y, color, isPlayer) {
+    rc.fillStyle=color;
 
-    raceCtx.fillStyle = color;
-
-    raceCtx.fillRect(
+    rc.fillRect(
         x,
         y,
         60,
         100
     );
 
-    /* roof */
+    rc.fillStyle=
+        player ? "#ddd" : "#222";
 
-    raceCtx.fillStyle =
-        isPlayer ? "#eeeeee" : "#222";
-
-    raceCtx.fillRect(
-        x + 10,
-        y + 18,
+    rc.fillRect(
+        x+10,
+        y+18,
         40,
         40
     );
 
-    /* windows */
+    rc.fillStyle="#111";
 
-    raceCtx.fillStyle = "#111";
-
-    raceCtx.fillRect(
-        x + 15,
-        y + 23,
+    rc.fillRect(
+        x+15,
+        y+23,
         30,
         14
     );
 
-    raceCtx.fillRect(
-        x + 15,
-        y + 42,
+    rc.fillRect(
+        x+15,
+        y+42,
         30,
         10
     );
 
-    /* wheels */
+    rc.fillStyle="#050505";
 
-    raceCtx.fillStyle = "#050505";
+    rc.fillRect(x-7,y+15,7,25);
+    rc.fillRect(x+60,y+15,7,25);
 
-    raceCtx.fillRect(
-        x - 7,
-        y + 15,
-        7,
-        25
-    );
+    rc.fillRect(x-7,y+65,7,25);
+    rc.fillRect(x+60,y+65,7,25);
 
-    raceCtx.fillRect(
-        x + 60,
-        y + 15,
-        7,
-        25
-    );
+    rc.fillStyle="#fff";
 
-    raceCtx.fillRect(
-        x - 7,
-        y + 65,
-        7,
-        25
-    );
+    rc.fillRect(x+8,y+5,12,8);
+    rc.fillRect(x+40,y+5,12,8);
+}
 
-    raceCtx.fillRect(
-        x + 60,
-        y + 65,
-        7,
-        25
-    );
 
-    /* headlights */
+function raceCollision(a,b){
 
-    raceCtx.fillStyle = "#fff";
-
-    raceCtx.fillRect(
-        x + 8,
-        y + 5,
-        12,
-        8
-    );
-
-    raceCtx.fillRect(
-        x + 40,
-        y + 5,
-        12,
-        8
+    return(
+        a.x<b.x+b.width &&
+        a.x+a.width>b.x &&
+        a.y<b.y+b.height &&
+        a.y+a.height>b.y
     );
 }
 
 
-/* COLLISION */
+function raceGameOver(){
 
-function raceCollision(a, b) {
+    raceRunning=false;
 
-    return (
-        a.x < b.x + b.width &&
-        a.x + a.width > b.x &&
-        a.y < b.y + b.height &&
-        a.y + a.height > b.y
-    );
-}
+    drawRace();
 
+    rc.fillStyle="rgba(0,0,0,.78)";
+    rc.fillRect(0,0,600,700);
 
-/* CRASH */
+    rc.fillStyle="#ff3333";
 
-function raceCrash() {
+    rc.font="bold 55px Arial";
+    rc.textAlign="center";
 
-    racing = false;
-
-    drawRaceGameOver();
-
-}
-
-
-/* GAME OVER SCREEN */
-
-function drawRaceGameOver() {
-
-    raceCtx.fillStyle =
-        "rgba(0,0,0,0.75)";
-
-    raceCtx.fillRect(
-        0,
-        0,
-        600,
-        700
-    );
-
-    raceCtx.fillStyle = "#ff3333";
-
-    raceCtx.font =
-        "bold 50px Arial";
-
-    raceCtx.textAlign = "center";
-
-    raceCtx.fillText(
-        "CRASH!",
+    rc.fillText(
+        "💥 CRASH!",
         300,
-        270
+        250
     );
 
-    raceCtx.fillStyle = "#fff";
+    rc.fillStyle="white";
 
-    raceCtx.font =
-        "bold 25px Arial";
+    rc.font="bold 28px Arial";
 
-    raceCtx.fillText(
-        "TIME: " +
-        Math.floor(raceElapsed) +
+    rc.fillText(
+        "TIME: "+
+        Math.floor(raceElapsed)+
         "s",
         300,
-        320
+        310
     );
 
-    raceCtx.fillText(
+    rc.fillText(
+        "SCORE: "+
+        raceScore,
+        300,
+        350
+    );
+
+    rc.font="22px Arial";
+
+    rc.fillText(
         "Press ENTER to play again",
         300,
-        390
+        410
     );
 
-    raceCtx.fillText(
+    rc.fillText(
         "Press M for menu",
         300,
-        430
+        450
     );
 }
 
 
-/* ENTER / MENU */
+document.addEventListener("keydown",function(e){
 
-document.addEventListener("keydown", function(e) {
+    if(
+        e.key==="Enter" &&
+        !raceRunning &&
+        document
+        .getElementById("raceScreen")
+        .classList.contains("active")
+    ){
 
-    if (e.key === "Enter" && !racing &&
-        document.getElementById("racingScreen").classList.contains("active")) {
-
-        startRacing(raceDifficulty);
+        startRace(raceDifficulty);
     }
 
-    if (e.key.toLowerCase() === "m" &&
-        !racing &&
-        document.getElementById("racingScreen").classList.contains("active")) {
+    if(
+        e.key.toLowerCase()==="m" &&
+        !raceRunning &&
+        document
+        .getElementById("raceScreen")
+        .classList.contains("active")
+    ){
 
-        openRacingMenu();
+        openRaceMenu();
     }
 
 });
 
 
-/* RACING LOOP */
+function drawRace(){
 
-function racingLoop(now) {
+    drawRoad();
 
-    if (!racing) return;
+    raceEnemies.forEach(function(car){
 
-    raceAnimation =
-        requestAnimationFrame(racingLoop);
-
-    if (racePaused) {
-
-        drawRaceRoad();
-
-        enemyCars.forEach(function(car) {
-
-            drawRaceCar(
-                car.x,
-                car.y,
-                car.color,
-                false
-            );
-
-        });
-
-        drawRaceCar(
-            playerX,
-            playerY,
-            "#00e5ff",
-            true
-        );
-
-        raceCtx.fillStyle =
-            "rgba(0,0,0,0.7)";
-
-        raceCtx.fillRect(
-            0,
-            0,
-            600,
-            700
-        );
-
-        raceCtx.fillStyle = "#fff";
-
-        raceCtx.font =
-            "bold 50px Arial";
-
-        raceCtx.textAlign = "center";
-
-        raceCtx.fillText(
-            "PAUSED",
-            300,
-            330
-        );
-
-        return;
-    }
-
-
-    const settings =
-        raceSettings[raceDifficulty];
-
-
-    raceElapsed =
-        (now - raceStartTime) / 1000;
-
-    document.getElementById("raceTime").textContent =
-        Math.floor(raceElapsed);
-
-
-    /* PLAYER */
-
-    if (raceKeys["arrowleft"] ||
-        raceKeys["a"]) {
-
-        playerX -= 7;
-    }
-
-    if (raceKeys["arrowright"] ||
-        raceKeys["d"]) {
-
-        playerX += 7;
-    }
-
-
-    if (playerX < 110) {
-        playerX = 110;
-    }
-
-    if (playerX > 430) {
-        playerX = 430;
-    }
-
-
-    /* ROAD */
-
-    roadOffset += settings.speed;
-
-    if (roadOffset > 120) {
-        roadOffset -= 120;
-    }
-
-
-    /* SPAWN */
-
-    spawnTimer++;
-
-    if (spawnTimer >= settings.spawnRate) {
-
-        spawnEnemy();
-
-        spawnTimer = 0;
-    }
-
-
-    /* ENEMIES */
-
-    enemyCars.forEach(function(car) {
-
-        car.y += car.speed;
-
-    });
-
-
-    enemyCars =
-        enemyCars.filter(function(car) {
-
-            return car.y < 750;
-
-        });
-
-
-    /* COLLISION */
-
-    const player = {
-        x: playerX,
-        y: playerY,
-        width: 60,
-        height: 100
-    };
-
-
-    for (let car of enemyCars) {
-
-        if (raceCollision(player, car)) {
-
-            raceCrash();
-            return;
-        }
-    }
-
-
-    /* DRAW */
-
-    drawRaceRoad();
-
-
-    enemyCars.forEach(function(car) {
-
-        drawRaceCar(
+        drawCar(
             car.x,
             car.y,
             car.color,
             false
         );
-
     });
 
-
-    drawRaceCar(
+    drawCar(
         playerX,
         playerY,
         "#00e5ff",
         true
     );
 
+    if(racePaused){
+
+        rc.fillStyle="rgba(0,0,0,.7)";
+        rc.fillRect(0,0,600,700);
+
+        rc.fillStyle="white";
+
+        rc.font="bold 55px Arial";
+        rc.textAlign="center";
+
+        rc.fillText(
+            "PAUSED",
+            300,
+            340
+        );
+    }
+}
+
+
+function raceLoop(now){
+
+    if(!raceRunning)return;
+
+    raceFrame=
+        requestAnimationFrame(raceLoop);
+
+    if(racePaused){
+
+        drawRace();
+        return;
+    }
+
+
+    raceElapsed=
+        (now-raceStart)/1000;
+
+    /*
+       SCORE = one point for every second
+       survived.
+    */
+
+    raceScore=
+        Math.floor(raceElapsed);
+
+
+    document.getElementById("raceTime").textContent=
+        Math.floor(raceElapsed);
+
+    document.getElementById("raceScore").textContent=
+        raceScore;
+
+
+    let settings=
+        raceSettings[raceDifficulty];
+
+
+    if(
+        raceKeys["arrowleft"] ||
+        raceKeys["a"]
+    ){
+
+        playerX-=7;
+    }
+
+
+    if(
+        raceKeys["arrowright"] ||
+        raceKeys["d"]
+    ){
+
+        playerX+=7;
+    }
+
+
+    if(playerX<110)playerX=110;
+    if(playerX>430)playerX=430;
+
+
+    roadOffset+=settings.speed;
+
+    if(roadOffset>120){
+        roadOffset-=120;
+    }
+
+
+    spawnTimer++;
+
+    if(spawnTimer>=settings.spawn){
+
+        spawnRaceEnemy();
+
+        spawnTimer=0;
+    }
+
+
+    raceEnemies.forEach(function(car){
+
+        car.y+=car.speed;
+    });
+
+
+    raceEnemies=
+        raceEnemies.filter(function(car){
+
+            return car.y<750;
+        });
+
+
+    let player={
+
+        x:playerX,
+        y:playerY,
+        width:60,
+        height:100
+    };
+
+
+    for(let car of raceEnemies){
+
+        if(raceCollision(player,car)){
+
+            raceGameOver();
+            return;
+        }
+    }
+
+
+    drawRace();
 }
 
 
@@ -855,347 +716,360 @@ function racingLoop(now) {
    GEOMETRY DASH
 ========================================================= */
 
-const geoCanvas =
+const geoCanvas=
     document.getElementById("geoCanvas");
 
-const geoCtx =
+const gc=
     geoCanvas.getContext("2d");
 
 
-const GEO_WIDTH = 1000;
-const GEO_HEIGHT = 600;
-const GROUND = 500;
+const GW=1000;
+const GH=600;
+const GROUND=500;
 
 
-let geometryRunning = false;
-let geometryPaused = false;
+let geoRunning=false;
+let geoPaused=false;
 
-let currentLevel = 1;
+let geoLevel=1;
 
-let geoPlayer = {
-    x: 150,
-    y: 430,
-    size: 45,
-    velocityY: 0,
-    onGround: true
-};
+let geoFrame;
 
-let geoSpeed = 6;
+let geoStart=0;
+let geoElapsed=0;
 
-let geoCamera = 0;
-
-let geoStartTime = 0;
-let geoElapsed = 0;
-
-let geoObstacles = [];
-
-let geoParticles = [];
-
-let geoAnimation;
+let geoSpeed=6;
 
 
-/* LEVEL SETTINGS */
+/*
+   IMPORTANT FIX:
 
-const levels = [
+   playerWorldX is the REAL position
+   of the character.
 
-    {
-        speed: 5.5,
-        obstacles: [
-            [650, "spike"],
-            [900, "spike"],
-            [1150, "block"],
-            [1450, "spike"],
-            [1700, "spike"]
-        ]
-    },
+   cameraX follows behind it.
 
-    {
-        speed: 6,
-        obstacles: [
-            [550, "spike"],
-            [750, "spike"],
-            [1000, "block"],
-            [1250, "spike"],
-            [1500, "spike"],
-            [1800, "block"]
-        ]
-    },
+   This means the character actually
+   moves forward instead of staying
+   frozen while only the camera moves.
+*/
 
-    {
-        speed: 6.5,
-        obstacles: [
-            [500, "spike"],
-            [700, "spike"],
-            [900, "spike"],
-            [1150, "block"],
-            [1400, "spike"],
-            [1650, "spike"],
-            [1900, "block"]
-        ]
-    },
+let playerWorldX=150;
 
-    {
-        speed: 7,
-        obstacles: [
-            [500, "spike"],
-            [650, "spike"],
-            [850, "block"],
-            [1050, "spike"],
-            [1250, "spike"],
-            [1450, "block"],
-            [1650, "spike"],
-            [1850, "spike"]
-        ]
-    },
+let playerY=455;
 
-    {
-        speed: 7.5,
-        obstacles: [
-            [500, "spike"],
-            [650, "spike"],
-            [800, "spike"],
-            [1000, "block"],
-            [1200, "spike"],
-            [1400, "spike"],
-            [1600, "block"],
-            [1800, "spike"],
-            [2000, "spike"]
-        ]
-    },
+let playerSize=45;
 
-    {
-        speed: 8,
-        obstacles: [
-            [500, "spike"],
-            [620, "spike"],
-            [740, "spike"],
-            [900, "block"],
-            [1100, "spike"],
-            [1250, "spike"],
-            [1450, "block"],
-            [1650, "spike"],
-            [1780, "spike"],
-            [1950, "block"]
-        ]
-    },
+let playerVelocity=0;
 
-    {
-        speed: 8.5,
-        obstacles: [
-            [480, "spike"],
-            [600, "spike"],
-            [720, "spike"],
-            [850, "spike"],
-            [1050, "block"],
-            [1250, "spike"],
-            [1370, "spike"],
-            [1550, "block"],
-            [1750, "spike"],
-            [1900, "spike"],
-            [2050, "block"]
-        ]
-    },
+let playerOnGround=true;
 
-    {
-        speed: 9,
-        obstacles: [
-            [450, "spike"],
-            [560, "spike"],
-            [670, "spike"],
-            [780, "spike"],
-            [950, "block"],
-            [1150, "spike"],
-            [1260, "spike"],
-            [1450, "block"],
-            [1650, "spike"],
-            [1760, "spike"],
-            [1880, "spike"],
-            [2050, "block"]
-        ]
-    },
+let cameraX=0;
 
-    {
-        speed: 9.5,
-        obstacles: [
-            [450, "spike"],
-            [550, "spike"],
-            [650, "spike"],
-            [750, "spike"],
-            [900, "block"],
-            [1080, "spike"],
-            [1180, "spike"],
-            [1280, "spike"],
-            [1450, "block"],
-            [1630, "spike"],
-            [1730, "spike"],
-            [1830, "spike"],
-            [2000, "block"]
-        ]
-    },
+let geoObstacles=[];
 
-    {
-        speed: 10,
-        obstacles: [
-            [430, "spike"],
-            [530, "spike"],
-            [630, "spike"],
-            [730, "spike"],
-            [830, "spike"],
-            [1000, "block"],
-            [1170, "spike"],
-            [1270, "spike"],
-            [1370, "spike"],
-            [1500, "block"],
-            [1670, "spike"],
-            [1770, "spike"],
-            [1870, "spike"],
-            [2050, "block"],
-            [2250, "spike"]
-        ]
-    }
+let particles=[];
+
+
+const levelData=[
+
+{
+ speed:5.5,
+ obs:[
+  [600,"spike"],
+  [900,"spike"],
+  [1200,"block"],
+  [1500,"spike"],
+  [1800,"spike"],
+  [2100,"block"]
+ ]
+},
+
+{
+ speed:6,
+ obs:[
+  [550,"spike"],
+  [750,"spike"],
+  [1000,"block"],
+  [1250,"spike"],
+  [1500,"spike"],
+  [1800,"block"],
+  [2050,"spike"]
+ ]
+},
+
+{
+ speed:6.5,
+ obs:[
+  [500,"spike"],
+  [700,"spike"],
+  [900,"spike"],
+  [1150,"block"],
+  [1400,"spike"],
+  [1650,"spike"],
+  [1900,"block"],
+  [2150,"spike"]
+ ]
+},
+
+{
+ speed:7,
+ obs:[
+  [500,"spike"],
+  [650,"spike"],
+  [850,"block"],
+  [1050,"spike"],
+  [1250,"spike"],
+  [1450,"block"],
+  [1650,"spike"],
+  [1850,"spike"],
+  [2100,"block"]
+ ]
+},
+
+{
+ speed:7.5,
+ obs:[
+  [500,"spike"],
+  [650,"spike"],
+  [800,"spike"],
+  [1000,"block"],
+  [1200,"spike"],
+  [1400,"spike"],
+  [1600,"block"],
+  [1800,"spike"],
+  [2000,"spike"],
+  [2250,"block"]
+ ]
+},
+
+{
+ speed:8,
+ obs:[
+  [500,"spike"],
+  [620,"spike"],
+  [740,"spike"],
+  [900,"block"],
+  [1100,"spike"],
+  [1250,"spike"],
+  [1450,"block"],
+  [1650,"spike"],
+  [1780,"spike"],
+  [1950,"block"],
+  [2200,"spike"]
+ ]
+},
+
+{
+ speed:8.5,
+ obs:[
+  [480,"spike"],
+  [600,"spike"],
+  [720,"spike"],
+  [850,"spike"],
+  [1050,"block"],
+  [1250,"spike"],
+  [1370,"spike"],
+  [1550,"block"],
+  [1750,"spike"],
+  [1900,"spike"],
+  [2100,"block"],
+  [2350,"spike"]
+ ]
+},
+
+{
+ speed:9,
+ obs:[
+  [450,"spike"],
+  [560,"spike"],
+  [670,"spike"],
+  [780,"spike"],
+  [950,"block"],
+  [1150,"spike"],
+  [1260,"spike"],
+  [1450,"block"],
+  [1650,"spike"],
+  [1760,"spike"],
+  [1880,"spike"],
+  [2050,"block"],
+  [2300,"spike"]
+ ]
+},
+
+{
+ speed:9.5,
+ obs:[
+  [450,"spike"],
+  [550,"spike"],
+  [650,"spike"],
+  [750,"spike"],
+  [900,"block"],
+  [1080,"spike"],
+  [1180,"spike"],
+  [1280,"spike"],
+  [1450,"block"],
+  [1630,"spike"],
+  [1730,"spike"],
+  [1830,"spike"],
+  [2000,"block"],
+  [2300,"spike"]
+ ]
+},
+
+{
+ speed:10,
+ obs:[
+  [430,"spike"],
+  [530,"spike"],
+  [630,"spike"],
+  [730,"spike"],
+  [830,"spike"],
+  [1000,"block"],
+  [1170,"spike"],
+  [1270,"spike"],
+  [1370,"spike"],
+  [1500,"block"],
+  [1670,"spike"],
+  [1770,"spike"],
+  [1870,"spike"],
+  [2050,"block"],
+  [2250,"spike"],
+  [2500,"block"]
+ ]
+}
 
 ];
 
 
 /* LEVEL BUTTONS */
 
-function createLevelButtons() {
+function createLevelButtons(){
 
-    const container =
-        document.getElementById("levelButtons");
+    let box=
+        document.getElementById("levels");
 
-    container.innerHTML = "";
+    box.innerHTML="";
 
-    for (let i = 1; i <= 10; i++) {
+    for(let i=1;i<=10;i++){
 
-        const button =
+        let b=
             document.createElement("button");
 
-        button.className =
-            "level-button";
+        b.textContent=
+            "LEVEL "+i;
 
-        button.textContent =
-            "LEVEL " + i;
-
-        button.onclick =
-            function() {
-                startGeometry(i);
+        b.onclick=
+            function(){
+                startGeo(i);
             };
 
-        container.appendChild(button);
+        box.appendChild(b);
     }
 }
 
 createLevelButtons();
 
 
-/* OPEN LEVEL MENU */
+function openGeoMenu(){
 
-function openGeometryMenu() {
+    stopGeo();
+    stopRace();
 
-    stopGeometry();
-    stopRacing();
-
-    showScreen("geometryMenu");
+    showScreen("geoMenu");
 }
 
 
-/* START GEOMETRY */
+function startGeo(level){
 
-function startGeometry(levelNumber) {
+    geoLevel=level;
 
-    currentLevel = levelNumber;
+    let settings=
+        levelData[level-1];
 
-    const settings =
-        levels[currentLevel - 1];
-
-    geoSpeed =
+    geoSpeed=
         settings.speed;
 
-    geoPlayer.x = 150;
-    geoPlayer.y = 430;
-    geoPlayer.velocityY = 0;
-    geoPlayer.onGround = true;
+    playerWorldX=150;
 
-    geoCamera = 0;
+    playerY=
+        GROUND-playerSize;
 
-    geoElapsed = 0;
+    playerVelocity=0;
 
-    geoStartTime =
+    playerOnGround=true;
+
+    cameraX=0;
+
+    geoElapsed=0;
+
+    geoStart=
         performance.now();
 
-    geoParticles = [];
+    particles=[];
 
-    geoObstacles =
-        settings.obstacles.map(function(item) {
+    geoObstacles=
+        settings.obs.map(function(o){
 
-            return {
-                x: item[0],
-                type: item[1]
+            return{
+                x:o[0],
+                type:o[1]
             };
-
         });
 
-    geometryRunning = true;
-    geometryPaused = false;
 
-    showScreen("geometryScreen");
+    geoRunning=true;
+    geoPaused=false;
 
-    requestAnimationFrame(geometryLoop);
+    showScreen("geoScreen");
+
+    cancelAnimationFrame(geoFrame);
+
+    geoFrame=
+        requestAnimationFrame(geoLoop);
 }
 
 
-/* STOP */
+function stopGeo(){
 
-function stopGeometry() {
+    geoRunning=false;
+    geoPaused=false;
 
-    geometryRunning = false;
-    geometryPaused = false;
-
-    if (geoAnimation) {
-
-        cancelAnimationFrame(
-            geoAnimation
-        );
-    }
+    cancelAnimationFrame(geoFrame);
 }
 
 
 /* JUMP */
 
-function geoJump() {
+function geoJump(){
 
-    if (!geometryRunning) return;
+    if(!geoRunning)return;
+    if(geoPaused)return;
 
-    if (geometryPaused) return;
+    if(playerOnGround){
 
-    if (geoPlayer.onGround) {
+        playerVelocity=-15;
 
-        geoPlayer.velocityY = -15;
+        playerOnGround=false;
 
-        geoPlayer.onGround = false;
-
-        createJumpParticles();
+        jumpParticles();
     }
 }
 
 
-/* KEYBOARD */
+document.addEventListener("keydown",function(e){
 
-document.addEventListener("keydown", function(e) {
+    if(
+        e.code==="Space" ||
+        e.key==="ArrowUp" ||
+        e.key.toLowerCase()==="w"
+    ){
 
-    if (
-        e.code === "Space" ||
-        e.key === "ArrowUp" ||
-        e.key.toLowerCase() === "w"
-    ) {
-
-        if (
+        if(
             document
-                .getElementById("geometryScreen")
-                .classList
-                .contains("active")
-        ) {
+            .getElementById("geoScreen")
+            .classList.contains("active")
+        ){
 
             e.preventDefault();
 
@@ -1203,240 +1077,208 @@ document.addEventListener("keydown", function(e) {
         }
     }
 
-    if (
-        e.key === "Escape" &&
-        geometryRunning
-    ) {
+    if(
+        e.key==="Escape" &&
+        geoRunning
+    ){
 
-        pauseGeometry();
+        toggleGeoPause();
     }
 
 });
 
 
-/* CLICK JUMP */
-
 geoCanvas.addEventListener(
     "mousedown",
-    function() {
-
+    function(){
         geoJump();
-
     }
 );
 
 
 /* PARTICLES */
 
-function createJumpParticles() {
+function jumpParticles(){
 
-    for (let i = 0; i < 10; i++) {
+    for(let i=0;i<12;i++){
 
-        geoParticles.push({
+        particles.push({
 
-            x:
-                geoPlayer.x +
-                geoPlayer.size / 2,
+            x:playerWorldX+
+              playerSize/2,
 
-            y:
-                geoPlayer.y +
-                geoPlayer.size,
+            y:playerY+
+              playerSize,
 
-            vx:
-                (Math.random() - 0.5) * 5,
+            vx:(Math.random()-.5)*5,
 
-            vy:
-                Math.random() * 3,
+            vy:Math.random()*3,
 
-            life: 30
-
+            life:30
         });
     }
 }
 
 
-function createRunParticles() {
+function runParticles(){
 
-    if (Math.random() > 0.35) return;
+    if(Math.random()>.35)return;
 
-    geoParticles.push({
+    particles.push({
 
-        x: geoPlayer.x + 5,
+        x:playerWorldX,
 
-        y: geoPlayer.y +
-            geoPlayer.size,
+        y:playerY+playerSize,
 
-        vx:
-            -Math.random() * 2,
+        vx:-2,
 
-        vy:
-            (Math.random() - 0.5),
+        vy:Math.random()-0.5,
 
-        life: 20
-
+        life:20
     });
 }
 
 
-function updateGeoParticles() {
+function updateParticles(){
 
-    geoParticles.forEach(function(p) {
+    particles.forEach(function(p){
 
-        p.x += p.vx;
+        p.x+=p.vx;
+        p.y+=p.vy;
 
-        p.y += p.vy;
-
-        p.vy += 0.15;
+        p.vy+=.15;
 
         p.life--;
-
     });
 
-    geoParticles =
-        geoParticles.filter(
-            function(p) {
-                return p.life > 0;
+    particles=
+        particles.filter(
+            function(p){
+                return p.life>0;
             }
         );
 }
 
 
-function drawGeoParticles() {
+function drawParticles(){
 
-    geoParticles.forEach(function(p) {
+    particles.forEach(function(p){
 
-        geoCtx.fillStyle =
-            "rgba(255,255,255," +
-            p.life / 30 +
+        let sx=
+            p.x-cameraX;
+
+        gc.fillStyle=
+            "rgba(255,255,255,"+
+            p.life/30+
             ")";
 
-        geoCtx.fillRect(
-            p.x - geoCamera,
+        gc.fillRect(
+            sx,
             p.y,
             6,
             6
         );
-
     });
 }
 
 
-/* DRAW PLAYER */
+/* PLAYER */
 
-function drawGeoPlayer() {
+function drawPlayer(){
 
-    const x =
-        geoPlayer.x -
-        geoCamera;
+    /*
+       The player screen position changes
+       while moving.
 
-    const y =
-        geoPlayer.y;
+       Camera follows more slowly,
+       making the forward movement visible.
+    */
 
-    geoCtx.save();
+    let screenX=
+        playerWorldX-cameraX;
 
-    geoCtx.translate(
-        x + geoPlayer.size / 2,
-        y + geoPlayer.size / 2
+    gc.save();
+
+    gc.translate(
+        screenX+playerSize/2,
+        playerY+playerSize/2
     );
 
-    geoCtx.rotate(
-        geoPlayer.velocityY * 0.025
+    gc.rotate(
+        playerVelocity*.025
     );
 
-    geoCtx.fillStyle =
-        "#00e5ff";
+    gc.fillStyle="#00e5ff";
 
-    geoCtx.fillRect(
-        -geoPlayer.size / 2,
-        -geoPlayer.size / 2,
-        geoPlayer.size,
-        geoPlayer.size
+    gc.fillRect(
+        -playerSize/2,
+        -playerSize/2,
+        playerSize,
+        playerSize
     );
 
-    geoCtx.fillStyle =
-        "#111";
+    gc.fillStyle="#111";
 
-    geoCtx.fillRect(
-        -10,
-        -10,
-        7,
-        7
-    );
+    gc.fillRect(-10,-10,7,7);
+    gc.fillRect(4,-10,7,7);
 
-    geoCtx.fillRect(
-        4,
-        -10,
-        7,
-        7
-    );
+    gc.fillRect(-9,5,20,5);
 
-    geoCtx.fillRect(
-        -9,
-        5,
-        20,
-        5
-    );
-
-    geoCtx.restore();
+    gc.restore();
 }
 
 
-/* DRAW SPIKE */
+/* SPIKE */
 
-function drawGeoSpike(x) {
+function drawSpike(worldX){
 
-    x -= geoCamera;
+    let x=
+        worldX-cameraX;
 
-    geoCtx.fillStyle =
-        "#ff3333";
+    gc.fillStyle="#ff3333";
 
-    geoCtx.beginPath();
+    gc.beginPath();
 
-    geoCtx.moveTo(
-        x,
+    gc.moveTo(x,GROUND);
+
+    gc.lineTo(
+        x+25,
+        GROUND-50
+    );
+
+    gc.lineTo(
+        x+50,
         GROUND
     );
 
-    geoCtx.lineTo(
-        x + 25,
-        GROUND - 50
-    );
+    gc.closePath();
 
-    geoCtx.lineTo(
-        x + 50,
-        GROUND
-    );
-
-    geoCtx.closePath();
-
-    geoCtx.fill();
+    gc.fill();
 }
 
 
-/* DRAW BLOCK */
+/* BLOCK */
 
-function drawGeoBlock(x) {
+function drawBlock(worldX){
 
-    x -= geoCamera;
+    let x=
+        worldX-cameraX;
 
-    geoCtx.fillStyle =
-        "#9b59b6";
+    gc.fillStyle="#9b59b6";
 
-    geoCtx.fillRect(
+    gc.fillRect(
         x,
-        GROUND - 50,
+        GROUND-50,
         55,
         50
     );
 
-    geoCtx.strokeStyle =
-        "#fff";
+    gc.strokeStyle="white";
+    gc.lineWidth=3;
 
-    geoCtx.lineWidth = 3;
-
-    geoCtx.strokeRect(
+    gc.strokeRect(
         x,
-        GROUND - 50,
+        GROUND-50,
         55,
         50
     );
@@ -1445,64 +1287,43 @@ function drawGeoBlock(x) {
 
 /* COLLISION */
 
-function geoCollision() {
+function geoCollision(){
 
-    const px =
-        geoPlayer.x;
+    let px=playerWorldX;
+    let py=playerY;
+    let s=playerSize;
 
-    const py =
-        geoPlayer.y;
+    for(let o of geoObstacles){
 
-    const ps =
-        geoPlayer.size;
-
-    for (let obstacle of geoObstacles) {
-
-        if (
-            obstacle.x >
-            px + ps + 50 ||
-
-            obstacle.x + 60 <
-            px - 50
-        ) {
+        if(
+            o.x>px+s+60 ||
+            o.x+60<px-60
+        ){
 
             continue;
         }
 
-        if (
-            obstacle.type === "spike"
-        ) {
 
-            const sx =
-                obstacle.x;
+        if(o.type==="spike"){
 
-            const sy =
-                GROUND - 50;
-
-            if (
-                px + ps > sx + 8 &&
-                px < sx + 42 &&
-                py + ps > sy + 10 &&
-                py < GROUND
-            ) {
+            if(
+                px+s>o.x+8 &&
+                px<o.x+42 &&
+                py+s>GROUND-45 &&
+                py<GROUND
+            ){
 
                 return true;
             }
 
-        } else {
+        }else{
 
-            const bx =
-                obstacle.x;
-
-            const by =
-                GROUND - 50;
-
-            if (
-                px + ps > bx &&
-                px < bx + 55 &&
-                py + ps > by &&
-                py < GROUND
-            ) {
+            if(
+                px+s>o.x &&
+                px<o.x+55 &&
+                py+s>GROUND-50 &&
+                py<GROUND
+            ){
 
                 return true;
             }
@@ -1513,559 +1334,513 @@ function geoCollision() {
 }
 
 
-/* CRASH */
+/* FINISH */
 
-function geometryCrash() {
+function getFinishX(){
 
-    geoPlayer.velocityY = -8;
-
-    geoPlayer.onGround = false;
-
-    createJumpParticles();
-
-    setTimeout(function() {
-
-        if (geometryRunning) {
-
-            startGeometry(currentLevel);
-
-        }
-
-    }, 300);
+    return(
+        geoObstacles[
+            geoObstacles.length-1
+        ].x+300
+    );
 }
 
 
-/* FINISH LINE */
+function drawFinish(){
 
-function drawFinishLine() {
+    let finish=
+        getFinishX();
 
-    const finishX =
-        geoObstacles.length > 0
-        ? geoObstacles[geoObstacles.length - 1].x + 300
-        : 2500;
+    let x=
+        finish-cameraX;
 
-    const screenX =
-        finishX - geoCamera;
+    if(
+        x>-100 &&
+        x<GW+100
+    ){
 
-    if (
-        screenX > -100 &&
-        screenX < GEO_WIDTH + 100
-    ) {
+        gc.fillStyle="white";
 
-        geoCtx.fillStyle =
-            "#fff";
-
-        geoCtx.fillRect(
-            screenX,
+        gc.fillRect(
+            x,
             250,
             10,
             250
         );
 
-        const squareSize = 20;
 
-        for (
-            let row = 0;
-            row < 8;
+        let size=20;
+
+        for(
+            let row=0;
+            row<8;
             row++
-        ) {
+        ){
 
-            for (
-                let col = 0;
-                col < 2;
+            for(
+                let col=0;
+                col<2;
                 col++
-            ) {
+            ){
 
-                if (
-                    (row + col) % 2 === 0
-                ) {
+                gc.fillStyle=
+                    (row+col)%2===0
+                    ? "#111"
+                    : "#fff";
 
-                    geoCtx.fillStyle =
-                        "#111";
-
-                } else {
-
-                    geoCtx.fillStyle =
-                        "#fff";
-                }
-
-                geoCtx.fillRect(
-                    screenX +
-                    10 +
-                    col * squareSize,
-
-                    250 +
-                    row * squareSize,
-
-                    squareSize,
-                    squareSize
+                gc.fillRect(
+                    x+10+col*size,
+                    250+row*size,
+                    size,
+                    size
                 );
             }
         }
 
-        geoCtx.fillStyle =
-            "#fff";
 
-        geoCtx.font =
-            "bold 24px Arial";
+        gc.fillStyle="white";
 
-        geoCtx.fillText(
+        gc.font="bold 24px Arial";
+
+        gc.textAlign="left";
+
+        gc.fillText(
             "FINISH",
-            screenX - 20,
+            x-20,
             230
         );
     }
 }
 
 
-/* GEOMETRY BACKGROUND */
+/* BACKGROUND */
 
-function drawGeometryBackground() {
+function drawGeoBackground(){
 
-    geoCtx.fillStyle =
-        "#161625";
+    gc.fillStyle="#161625";
 
-    geoCtx.fillRect(
+    gc.fillRect(
         0,
         0,
-        GEO_WIDTH,
-        GEO_HEIGHT
+        GW,
+        GH
     );
 
-    /* background lines */
 
-    geoCtx.strokeStyle =
-        "#292945";
+    gc.strokeStyle="#292945";
 
-    geoCtx.lineWidth = 2;
+    gc.lineWidth=2;
 
-    for (
-        let x = -geoCamera % 50;
-        x < GEO_WIDTH;
-        x += 50
-    ) {
 
-        geoCtx.beginPath();
+    /*
+       Moving background grid.
+    */
 
-        geoCtx.moveTo(
-            x,
-            0
-        );
+    let gridOffset=
+        -(cameraX%50);
 
-        geoCtx.lineTo(
-            x,
-            GROUND
-        );
+    for(
+        let x=gridOffset;
+        x<GW;
+        x+=50
+    ){
 
-        geoCtx.stroke();
+        gc.beginPath();
+
+        gc.moveTo(x,0);
+        gc.lineTo(x,GROUND);
+
+        gc.stroke();
     }
 
-    /* ground */
 
-    geoCtx.fillStyle =
-        "#222";
+    gc.fillStyle="#222";
 
-    geoCtx.fillRect(
+    gc.fillRect(
         0,
         GROUND,
-        GEO_WIDTH,
-        GEO_HEIGHT - GROUND
+        GW,
+        GH-GROUND
     );
 
-    geoCtx.fillStyle =
-        "#00e5ff";
 
-    geoCtx.fillRect(
+    gc.fillStyle="#00e5ff";
+
+    gc.fillRect(
         0,
         GROUND,
-        GEO_WIDTH,
+        GW,
         5
     );
 }
 
 
-/* GEOMETRY GAME LOOP */
+/* DRAW GEOMETRY */
 
-function geometryLoop(now) {
+function drawGeo(){
 
-    if (!geometryRunning) return;
+    drawGeoBackground();
 
-    geoAnimation =
-        requestAnimationFrame(
-            geometryLoop
-        );
+    drawFinish();
 
-
-    if (geometryPaused) {
-
-        drawGeometryGame();
-
-        drawPauseOverlay();
-
-        return;
-    }
-
-
-    geoElapsed =
-        (now - geoStartTime) / 1000;
-
-    document.getElementById("geoTime")
-        .textContent =
-        Math.floor(geoElapsed);
-
-
-    /* PHYSICS */
-
-    geoPlayer.velocityY += 0.8;
-
-    geoPlayer.y +=
-        geoPlayer.velocityY;
-
-
-    if (
-        geoPlayer.y +
-        geoPlayer.size >=
-        GROUND
-    ) {
-
-        geoPlayer.y =
-            GROUND -
-            geoPlayer.size;
-
-        geoPlayer.velocityY = 0;
-
-        geoPlayer.onGround = true;
-
-        createRunParticles();
-
-    }
-
-
-    /* CAMERA */
-
-    geoCamera +=
-        geoSpeed;
-
-
-    /* PARTICLES */
-
-    updateGeoParticles();
-
-
-    /* COLLISION */
-
-    if (geoCollision()) {
-
-        geometryCrash();
-
-        return;
-    }
-
-
-    /* FINISH */
-
-    const finishX =
-        geoObstacles[
-            geoObstacles.length - 1
-        ].x + 300;
-
-    if (
-        geoPlayer.x >=
-        finishX
-    ) {
-
-        geometryComplete();
-
-        return;
-    }
-
-
-    drawGeometryGame();
-}
-
-
-/* DRAW GAME */
-
-function drawGeometryGame() {
-
-    drawGeometryBackground();
-
-    drawFinishLine();
 
     geoObstacles.forEach(
-        function(obstacle) {
+        function(o){
 
-            if (
-                obstacle.type === "spike"
-            ) {
+            if(o.type==="spike"){
 
-                drawGeoSpike(
-                    obstacle.x
-                );
+                drawSpike(o.x);
 
-            } else {
+            }else{
 
-                drawGeoBlock(
-                    obstacle.x
-                );
+                drawBlock(o.x);
             }
         }
     );
 
-    drawGeoParticles();
 
-    drawGeoPlayer();
+    drawParticles();
 
-    /* level */
+    drawPlayer();
 
-    geoCtx.fillStyle =
-        "#fff";
 
-    geoCtx.font =
-        "bold 22px Arial";
+    gc.fillStyle="white";
 
-    geoCtx.textAlign =
-        "left";
+    gc.font="bold 22px Arial";
 
-    geoCtx.fillText(
-        "LEVEL " + currentLevel,
+    gc.textAlign="left";
+
+    gc.fillText(
+        "LEVEL "+geoLevel,
         20,
         35
     );
 }
 
 
-/* PAUSE */
+/* CRASH */
 
-function pauseGeometry() {
+function geoCrash(){
 
-    if (!geometryRunning) return;
+    geoRunning=false;
 
-    geometryPaused =
-        !geometryPaused;
+    drawGeo();
 
-    if (!geometryPaused) {
+    gc.fillStyle=
+        "rgba(0,0,0,.75)";
 
-        geoStartTime =
-            performance.now() -
-            geoElapsed * 1000;
-
-        requestAnimationFrame(
-            geometryLoop
-        );
-    }
-}
-
-
-/* PAUSE SCREEN */
-
-function drawPauseOverlay() {
-
-    geoCtx.fillStyle =
-        "rgba(0,0,0,0.65)";
-
-    geoCtx.fillRect(
+    gc.fillRect(
         0,
         0,
-        GEO_WIDTH,
-        GEO_HEIGHT
+        GW,
+        GH
     );
 
-    geoCtx.fillStyle =
-        "#fff";
+    gc.fillStyle="#ff3333";
 
-    geoCtx.font =
-        "bold 60px Arial";
+    gc.font="bold 65px Arial";
 
-    geoCtx.textAlign =
-        "center";
+    gc.textAlign="center";
 
-    geoCtx.fillText(
-        "PAUSED",
-        GEO_WIDTH / 2,
-        280
+    gc.fillText(
+        "CRASH!",
+        GW/2,
+        260
     );
 
-    geoCtx.font =
-        "25px Arial";
+    gc.fillStyle="white";
 
-    geoCtx.fillText(
-        "Press PAUSE again to continue",
-        GEO_WIDTH / 2,
-        330
+    gc.font="25px Arial";
+
+    gc.fillText(
+        "Restarting...",
+        GW/2,
+        315
     );
+
+
+    setTimeout(function(){
+
+        if(
+            document
+            .getElementById("geoScreen")
+            .classList.contains("active")
+        ){
+
+            startGeo(geoLevel);
+        }
+
+    },700);
 }
 
 
 /* COMPLETE */
 
-function geometryComplete() {
+function geoComplete(){
 
-    geometryRunning = false;
+    geoRunning=false;
 
-    drawGeometryGame();
+    drawGeo();
 
-    geoCtx.fillStyle =
-        "rgba(0,0,0,0.7)";
+    gc.fillStyle=
+        "rgba(0,0,0,.72)";
 
-    geoCtx.fillRect(
+    gc.fillRect(
         0,
         0,
-        GEO_WIDTH,
-        GEO_HEIGHT
+        GW,
+        GH
     );
 
-    geoCtx.fillStyle =
-        "#00ff88";
+    gc.fillStyle="#00ff88";
 
-    geoCtx.font =
-        "bold 60px Arial";
+    gc.font="bold 60px Arial";
 
-    geoCtx.textAlign =
-        "center";
+    gc.textAlign="center";
 
-    geoCtx.fillText(
+    gc.fillText(
         "LEVEL COMPLETE!",
-        GEO_WIDTH / 2,
+        GW/2,
         250
     );
 
-    geoCtx.fillStyle =
-        "#fff";
+    gc.fillStyle="white";
 
-    geoCtx.font =
-        "bold 30px Arial";
+    gc.font="bold 30px Arial";
 
-    geoCtx.fillText(
-        "Time: " +
-        Math.floor(geoElapsed) +
+    gc.fillText(
+        "Time: "+
+        Math.floor(geoElapsed)+
         " seconds",
-        GEO_WIDTH / 2,
+        GW/2,
         310
     );
 
-    geoCtx.font =
-        "22px Arial";
+    gc.font="22px Arial";
 
-    geoCtx.fillText(
-        "Press ENTER for next level",
-        GEO_WIDTH / 2,
-        370
-    );
+    if(geoLevel<10){
 
-    geoCtx.fillText(
+        gc.fillText(
+            "Press ENTER for next level",
+            GW/2,
+            370
+        );
+
+    }else{
+
+        gc.fillText(
+            "YOU BEAT ALL 10 LEVELS!",
+            GW/2,
+            370
+        );
+    }
+
+    gc.fillText(
         "Press L for levels",
-        GEO_WIDTH / 2,
+        GW/2,
         410
     );
 }
 
 
-/* NEXT LEVEL */
+/* PAUSE */
+
+function toggleGeoPause(){
+
+    if(!geoRunning)return;
+
+    geoPaused=!geoPaused;
+
+    if(!geoPaused){
+
+        geoStart=
+            performance.now()-
+            geoElapsed*1000;
+
+        geoFrame=
+            requestAnimationFrame(
+                geoLoop
+            );
+    }
+}
+
+
+function drawGeoPause(){
+
+    gc.fillStyle=
+        "rgba(0,0,0,.7)";
+
+    gc.fillRect(
+        0,
+        0,
+        GW,
+        GH
+    );
+
+    gc.fillStyle="white";
+
+    gc.font="bold 60px Arial";
+
+    gc.textAlign="center";
+
+    gc.fillText(
+        "PAUSED",
+        GW/2,
+        280
+    );
+}
+
+
+/* MAIN GEOMETRY LOOP */
+
+function geoLoop(now){
+
+    if(!geoRunning)return;
+
+    geoFrame=
+        requestAnimationFrame(
+            geoLoop
+        );
+
+
+    if(geoPaused){
+
+        drawGeo();
+        drawGeoPause();
+
+        return;
+    }
+
+
+    geoElapsed=
+        (now-geoStart)/1000;
+
+    document.getElementById("geoTime").textContent=
+        Math.floor(geoElapsed);
+
+
+    /*
+       REAL CHARACTER MOVEMENT
+
+       The character's world position moves
+       forward every frame.
+    */
+
+    playerWorldX+=geoSpeed;
+
+
+    /* GRAVITY */
+
+    playerVelocity+=.8;
+
+    playerY+=playerVelocity;
+
+
+    if(
+        playerY+playerSize>=GROUND
+    ){
+
+        playerY=
+            GROUND-playerSize;
+
+        playerVelocity=0;
+
+        playerOnGround=true;
+
+        runParticles();
+
+    }else{
+
+        playerOnGround=false;
+    }
+
+
+    /*
+       CAMERA FOLLOW
+
+       Camera follows the player but does
+       not completely lock the player.
+       This makes the movement visible.
+    */
+
+    let targetCamera=
+        playerWorldX-350;
+
+    cameraX+=
+        (targetCamera-cameraX)*.08;
+
+
+    if(cameraX<0){
+        cameraX=0;
+    }
+
+
+    updateParticles();
+
+
+    if(geoCollision()){
+
+        geoCrash();
+        return;
+    }
+
+
+    if(
+        playerWorldX>=getFinishX()
+    ){
+
+        geoComplete();
+        return;
+    }
+
+
+    drawGeo();
+}
+
+
+/* NEXT LEVEL / LEVEL MENU */
 
 document.addEventListener(
     "keydown",
-    function(e) {
+    function(e){
 
-        if (
-            e.key === "Enter" &&
-            !geometryRunning &&
+        if(
+            e.key==="Enter" &&
+            !geoRunning &&
             document
-                .getElementById("geometryScreen")
-                .classList
-                .contains("active")
-        ) {
+            .getElementById("geoScreen")
+            .classList.contains("active")
+        ){
 
-            if (currentLevel < 10) {
+            if(geoLevel<10){
 
-                startGeometry(
-                    currentLevel + 1
-                );
+                startGeo(geoLevel+1);
 
-            } else {
+            }else{
 
-                openGeometryMenu();
+                openGeoMenu();
             }
         }
 
 
-        if (
-            e.key.toLowerCase() === "l" &&
-            !geometryRunning &&
+        if(
+            e.key.toLowerCase()==="l" &&
+            !geoRunning &&
             document
-                .getElementById("geometryScreen")
-                .classList
-                .contains("active")
-        ) {
+            .getElementById("geoScreen")
+            .classList.contains("active")
+        ){
 
-            openGeometryMenu();
+            openGeoMenu();
         }
 
     }
 );
 
 
-/* =========================================================
-   TOUCH / MOBILE SUPPORT
-========================================================= */
+/* START */
 
-let touchStartX = null;
-
-raceCanvas.addEventListener(
-    "touchstart",
-    function(e) {
-
-        touchStartX =
-            e.touches[0].clientX;
-
-    }
-);
-
-raceCanvas.addEventListener(
-    "touchmove",
-    function(e) {
-
-        if (touchStartX === null)
-            return;
-
-        const x =
-            e.touches[0].clientX;
-
-        const difference =
-            x - touchStartX;
-
-        playerX +=
-            difference * 0.1;
-
-        if (playerX < 110)
-            playerX = 110;
-
-        if (playerX > 430)
-            playerX = 430;
-
-        touchStartX = x;
-
-        e.preventDefault();
-
-    },
-    { passive: false }
-);
-
-raceCanvas.addEventListener(
-    "touchend",
-    function() {
-
-        touchStartX = null;
-
-    }
-);
-
-
-/* =========================================================
-   START
-========================================================= */
-
-showScreen("homeScreen");
+showScreen("home");
 
 </script>
 
