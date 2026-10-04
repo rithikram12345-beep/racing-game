@@ -2,197 +2,186 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>RITHIK Games</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Games</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    user-select:none;
+* {
+    box-sizing: border-box;
 }
 
-body{
-    margin:0;
-    background:#111;
-    color:white;
-    font-family:Arial,sans-serif;
-    text-align:center;
+body {
+    margin: 0;
+    background: #111;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    overflow-x: hidden;
 }
 
-.screen{
-    display:none;
+h1 {
+    margin: 20px 0;
 }
 
-.screen.active{
-    display:block;
+button {
+    padding: 12px 25px;
+    margin: 8px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    background: #3498db;
+    color: white;
 }
 
-.menu{
-    max-width:750px;
-    margin:50px auto;
-    padding:35px;
-    background:#222;
-    border:2px solid #555;
-    border-radius:20px;
+button:hover {
+    opacity: 0.8;
 }
 
-h1{
-    font-size:45px;
-    margin:15px;
+.screen {
+    display: none;
 }
 
-button{
-    border:0;
-    border-radius:12px;
-    padding:14px 25px;
-    margin:8px;
-    font-size:20px;
-    font-weight:bold;
-    cursor:pointer;
-    color:white;
-    background:#3498db;
+.active {
+    display: block;
 }
 
-button:hover{
-    transform:scale(1.05);
+canvas {
+    display: block;
+    margin: 15px auto;
+    border: 3px solid white;
+    background: black;
+    max-width: 95vw;
 }
 
-.easy{background:#27ae60}
-.medium{background:#f39c12}
-.hard{background:#e74c3c}
-
-canvas{
-    display:block;
-    margin:15px auto;
-    border:4px solid white;
-    border-radius:10px;
-    max-width:95vw;
+.info {
+    font-size: 20px;
+    margin: 10px;
 }
 
-.info{
-    font-size:21px;
-    margin:8px;
-}
-
-.small{
-    color:#aaa;
+.gameButtons {
+    margin-top: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<div id="home" class="screen active">
-    <div class="menu">
-        <h1>🎮 MY GAMES</h1>
-        <p class="info">Choose a game</p>
+<!-- HOME -->
+<div id="homeScreen" class="screen active">
+    <h1>MY GAMES</h1>
 
-        <button onclick="openRaceMenu()">🏎️ RACING GAME</button>
-        <button onclick="openGeoMenu()">🎮 GEOMETRY DASH</button>
-    </div>
+    <button onclick="showRacingMenu()">Racing Game</button>
+    <button onclick="showGeometryMenu()">Geometry Dash</button>
 </div>
 
 
-<div id="raceMenu" class="screen">
-    <div class="menu">
-        <h1>🏎️ RACING GAME</h1>
+<!-- RACING MENU -->
+<div id="racingMenu" class="screen">
+    <h1>RACING GAME</h1>
 
-        <p class="info">Choose difficulty</p>
+    <p>Select Difficulty</p>
 
-        <button class="easy" onclick="startRace('easy')">EASY</button>
-        <button class="medium" onclick="startRace('medium')">MEDIUM</button>
-        <button class="hard" onclick="startRace('hard')">HARD</button>
+    <button onclick="startRacing('easy')">Easy</button>
+    <button onclick="startRacing('medium')">Medium</button>
+    <button onclick="startRacing('hard')">Hard</button>
 
-        <br>
+    <br>
 
-        <button onclick="goHome()">HOME</button>
-    </div>
+    <button onclick="goHome()">Home</button>
 </div>
 
 
-<div id="raceScreen" class="screen">
+<!-- RACING GAME -->
+<div id="racingGameScreen" class="screen">
 
-    <h1>🏎️ RACING GAME</h1>
+    <h1>RACING GAME</h1>
 
     <div class="info">
-        TIME: <span id="raceTime">0</span>s
+        TIME: <span id="raceTime">0</span> seconds
         &nbsp;&nbsp;&nbsp;
         SCORE: <span id="raceScore">0</span>
     </div>
 
     <canvas id="raceCanvas" width="600" height="700"></canvas>
 
-    <button onclick="toggleRacePause()">PAUSE</button>
-    <button onclick="goHome()">HOME</button>
-
-    <p class="small">
-        Move with LEFT / RIGHT or A / D
-    </p>
-</div>
-
-
-<div id="geoMenu" class="screen">
-
-    <div class="menu">
-
-        <h1>🎮 GEOMETRY DASH</h1>
-
-        <p class="info">Choose a level</p>
-
-        <div id="levels"></div>
-
-        <br>
-
-        <button onclick="goHome()">HOME</button>
-
+    <div class="gameButtons">
+        <button onclick="pauseRace()">Pause</button>
+        <button onclick="goHome()">Home</button>
     </div>
-
 </div>
 
 
-<div id="geoScreen" class="screen">
+<!-- GEOMETRY MENU -->
+<div id="geometryMenu" class="screen">
+    <h1>GEOMETRY DASH</h1>
 
-    <h1>🎮 GEOMETRY DASH</h1>
+    <p>Select Level</p>
+
+    <div id="levelButtons"></div>
+
+    <br>
+
+    <button onclick="goHome()">Home</button>
+</div>
+
+
+<!-- GEOMETRY GAME -->
+<div id="geometryGameScreen" class="screen">
+
+    <h1>GEOMETRY DASH</h1>
 
     <div class="info">
-        TIME: <span id="geoTime">0</span>s
+        LEVEL: <span id="geoLevelText">1</span>
+        &nbsp;&nbsp;&nbsp;
+        TIME: <span id="geoTime">0</span> seconds
     </div>
 
     <canvas id="geoCanvas" width="1000" height="600"></canvas>
 
-    <button onclick="toggleGeoPause()">PAUSE</button>
-    <button onclick="openGeoMenu()">LEVELS</button>
-    <button onclick="goHome()">HOME</button>
-
-    <p class="small">
-        SPACE / UP / W / CLICK = JUMP
-    </p>
-
+    <div class="gameButtons">
+        <button onclick="pauseGeometry()">Pause</button>
+        <button onclick="showGeometryMenu()">Levels</button>
+        <button onclick="goHome()">Home</button>
+    </div>
 </div>
 
 
 <script>
 
 /* =========================================================
-   SCREEN SYSTEM
+   GENERAL SCREEN SYSTEM
 ========================================================= */
 
-function showScreen(id){
-
-    document.querySelectorAll(".screen").forEach(function(s){
-        s.classList.remove("active");
+function hideAllScreens() {
+    document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
     });
-
-    document.getElementById(id).classList.add("active");
 }
 
+function goHome() {
+    hideAllScreens();
+    document.getElementById("homeScreen").classList.add("active");
 
-function goHome(){
+    raceRunning = false;
+    geoRunning = false;
+}
 
-    stopRace();
-    stopGeo();
+function showRacingMenu() {
+    hideAllScreens();
+    document.getElementById("racingMenu").classList.add("active");
+}
 
-    showScreen("home");
+function showGeometryMenu() {
+    hideAllScreens();
+    document.getElementById("geometryMenu").classList.add("active");
+
+    geoRunning = false;
+}
+
+function startGameScreen(id) {
+    hideAllScreens();
+    document.getElementById(id).classList.add("active");
 }
 
 
@@ -200,1133 +189,1113 @@ function goHome(){
    RACING GAME
 ========================================================= */
 
-const raceCanvas =
-    document.getElementById("raceCanvas");
+const raceCanvas = document.getElementById("raceCanvas");
+const raceCtx = raceCanvas.getContext("2d");
 
-const rc =
-    raceCanvas.getContext("2d");
+let raceRunning = false;
+let racePaused = false;
+let raceGameOver = false;
 
-let raceRunning=false;
-let racePaused=false;
+let raceDifficulty = "easy";
 
-let raceDifficulty="easy";
-
-let playerX=270;
-let playerY=580;
-
-let raceEnemies=[];
-
-let raceStart=0;
-let raceElapsed=0;
-let raceScore=0;
-
-let roadOffset=0;
-let spawnTimer=0;
-
-let raceFrame;
-
-
-const raceSettings={
-
-    easy:{
-        speed:4,
-        spawn:100,
-        max:2
-    },
-
-    medium:{
-        speed:5,
-        spawn:75,
-        max:3
-    },
-
-    hard:{
-        speed:7,
-        spawn:50,
-        max:4
-    }
-
+let playerCar = {
+    x: 275,
+    y: 580,
+    width: 50,
+    height: 90,
+    speed: 7
 };
 
+let enemyCars = [];
 
-let raceKeys={};
+let raceStartTime = 0;
+let raceElapsed = 0;
+let raceAnimation;
 
+let lastEnemyTime = 0;
 
-document.addEventListener("keydown",function(e){
+function startRacing(difficulty) {
 
-    raceKeys[e.key.toLowerCase()]=true;
+    raceDifficulty = difficulty;
 
-    if(
-        e.key==="ArrowLeft" ||
-        e.key==="ArrowRight" ||
-        e.key===" "
-    ){
-        e.preventDefault();
+    startGameScreen("racingGameScreen");
+
+    raceRunning = true;
+    racePaused = false;
+    raceGameOver = false;
+
+    playerCar.x = 275;
+
+    enemyCars = [];
+
+    raceStartTime = performance.now();
+    raceElapsed = 0;
+
+    lastEnemyTime = 0;
+
+    document.getElementById("raceTime").textContent = "0";
+    document.getElementById("raceScore").textContent = "0";
+
+    if (difficulty === "easy") {
+        playerCar.speed = 6;
     }
 
-});
+    if (difficulty === "medium") {
+        playerCar.speed = 8;
+    }
 
+    if (difficulty === "hard") {
+        playerCar.speed = 10;
+    }
 
-document.addEventListener("keyup",function(e){
-
-    raceKeys[e.key.toLowerCase()]=false;
-
-});
-
-
-function openRaceMenu(){
-
-    stopRace();
-    stopGeo();
-
-    showScreen("raceMenu");
+    cancelAnimationFrame(raceAnimation);
+    raceLoop();
 }
 
 
-function startRace(difficulty){
+function drawRaceRoad() {
 
-    raceDifficulty=difficulty;
+    raceCtx.fillStyle = "#168a35";
+    raceCtx.fillRect(0, 0, 600, 700);
 
-    playerX=270;
-    playerY=580;
+    raceCtx.fillStyle = "#333";
+    raceCtx.fillRect(100, 0, 400, 700);
 
-    raceEnemies=[];
+    raceCtx.fillStyle = "#fff";
 
-    spawnTimer=0;
+    raceCtx.fillRect(95, 0, 5, 700);
+    raceCtx.fillRect(500, 0, 5, 700);
 
-    raceElapsed=0;
-    raceScore=0;
-
-    document.getElementById("raceTime").textContent="0";
-    document.getElementById("raceScore").textContent="0";
-
-    raceStart=performance.now();
-
-    raceRunning=true;
-    racePaused=false;
-
-    showScreen("raceScreen");
-
-    cancelAnimationFrame(raceFrame);
-
-    raceFrame=requestAnimationFrame(raceLoop);
-}
-
-
-function stopRace(){
-
-    raceRunning=false;
-    racePaused=false;
-
-    cancelAnimationFrame(raceFrame);
-}
-
-
-function toggleRacePause(){
-
-    if(!raceRunning)return;
-
-    racePaused=!racePaused;
-
-    if(!racePaused){
-
-        raceStart=
-            performance.now()-
-            raceElapsed*1000;
-
-        raceFrame=requestAnimationFrame(raceLoop);
+    for (let y = -50; y < 700; y += 100) {
+        raceCtx.fillRect(295, y, 10, 55);
     }
 }
 
 
-function spawnRaceEnemy(){
+function drawCar(car, color) {
 
-    let settings=raceSettings[raceDifficulty];
+    raceCtx.fillStyle = color;
 
-    if(raceEnemies.length>=settings.max)return;
+    raceCtx.fillRect(
+        car.x,
+        car.y,
+        car.width,
+        car.height
+    );
 
-    let lanes=[145,270,395];
+    raceCtx.fillStyle = "#111";
 
-    let lane=
-        lanes[Math.floor(Math.random()*lanes.length)];
+    raceCtx.fillRect(
+        car.x + 8,
+        car.y + 12,
+        car.width - 16,
+        25
+    );
 
-    let colors=[
-        "#e74c3c",
+    raceCtx.fillStyle = "#222";
+
+    raceCtx.fillRect(
+        car.x - 7,
+        car.y + 15,
+        7,
+        25
+    );
+
+    raceCtx.fillRect(
+        car.x + car.width,
+        car.y + 15,
+        7,
+        25
+    );
+
+    raceCtx.fillRect(
+        car.x - 7,
+        car.y + 60,
+        7,
+        25
+    );
+
+    raceCtx.fillRect(
+        car.x + car.width,
+        car.y + 60,
+        7,
+        25
+    );
+}
+
+
+function createEnemy() {
+
+    let colors = [
         "#3498db",
         "#f1c40f",
-        "#2ecc71",
         "#9b59b6",
-        "#e67e22"
+        "#2ecc71",
+        "#e67e22",
+        "#ffffff"
     ];
 
-    let color=
-        colors[Math.floor(Math.random()*colors.length)];
+    let width = 50;
+    let height = 90;
 
-    raceEnemies.push({
+    let x = 120 + Math.random() * 330;
 
-        x:lane,
-        y:-120,
+    let speed;
 
-        width:60,
-        height:100,
+    if (raceDifficulty === "easy") {
+        speed = 3 + Math.random() * 2;
+    }
 
-        speed:
-            settings.speed*
-            (0.8+Math.random()*0.5),
+    if (raceDifficulty === "medium") {
+        speed = 4 + Math.random() * 3;
+    }
 
-        color:color
+    if (raceDifficulty === "hard") {
+        speed = 6 + Math.random() * 4;
+    }
+
+    enemyCars.push({
+        x: x,
+        y: -100,
+        width: width,
+        height: height,
+        speed: speed,
+        color: colors[Math.floor(Math.random() * colors.length)]
     });
 }
 
 
-function drawRoad(){
+function rectanglesCollide(a, b) {
 
-    rc.fillStyle="#16823b";
-    rc.fillRect(0,0,600,700);
-
-    rc.fillStyle="#333";
-    rc.fillRect(100,0,400,700);
-
-    rc.fillStyle="white";
-
-    rc.fillRect(100,0,6,700);
-    rc.fillRect(494,0,6,700);
-
-    for(
-        let y=-120;
-        y<700;
-        y+=120
-    ){
-
-        rc.fillRect(
-            198,
-            y+roadOffset,
-            7,
-            60
-        );
-
-        rc.fillRect(
-            396,
-            y+roadOffset,
-            7,
-            60
-        );
-    }
-}
-
-
-function drawCar(x,y,color,player){
-
-    rc.fillStyle=color;
-
-    rc.fillRect(
-        x,
-        y,
-        60,
-        100
-    );
-
-    rc.fillStyle=
-        player ? "#ddd" : "#222";
-
-    rc.fillRect(
-        x+10,
-        y+18,
-        40,
-        40
-    );
-
-    rc.fillStyle="#111";
-
-    rc.fillRect(
-        x+15,
-        y+23,
-        30,
-        14
-    );
-
-    rc.fillRect(
-        x+15,
-        y+42,
-        30,
-        10
-    );
-
-    rc.fillStyle="#050505";
-
-    rc.fillRect(x-7,y+15,7,25);
-    rc.fillRect(x+60,y+15,7,25);
-
-    rc.fillRect(x-7,y+65,7,25);
-    rc.fillRect(x+60,y+65,7,25);
-
-    rc.fillStyle="#fff";
-
-    rc.fillRect(x+8,y+5,12,8);
-    rc.fillRect(x+40,y+5,12,8);
-}
-
-
-function raceCollision(a,b){
-
-    return(
-        a.x<b.x+b.width &&
-        a.x+a.width>b.x &&
-        a.y<b.y+b.height &&
-        a.y+a.height>b.y
+    return (
+        a.x < b.x + b.width &&
+        a.x + a.width > b.x &&
+        a.y < b.y + b.height &&
+        a.y + a.height > b.y
     );
 }
 
 
-function raceGameOver(){
+function showRaceGameOver() {
 
-    raceRunning=false;
+    raceRunning = false;
+    raceGameOver = true;
 
-    drawRace();
+    raceCtx.fillStyle = "rgba(0,0,0,0.75)";
+    raceCtx.fillRect(0, 0, 600, 700);
 
-    rc.fillStyle="rgba(0,0,0,.78)";
-    rc.fillRect(0,0,600,700);
+    raceCtx.fillStyle = "red";
+    raceCtx.font = "bold 55px Arial";
+    raceCtx.textAlign = "center";
+    raceCtx.fillText("CRASH!", 300, 280);
 
-    rc.fillStyle="#ff3333";
-
-    rc.font="bold 55px Arial";
-    rc.textAlign="center";
-
-    rc.fillText(
-        "💥 CRASH!",
+    raceCtx.fillStyle = "white";
+    raceCtx.font = "bold 28px Arial";
+    raceCtx.fillText(
+        "Score: " + Math.floor(raceElapsed),
         300,
-        250
+        330
     );
 
-    rc.fillStyle="white";
-
-    rc.font="bold 28px Arial";
-
-    rc.fillText(
-        "TIME: "+
-        Math.floor(raceElapsed)+
-        "s",
+    raceCtx.font = "22px Arial";
+    raceCtx.fillText(
+        "Press R to play again",
         300,
-        310
+        390
     );
 
-    rc.fillText(
-        "SCORE: "+
-        raceScore,
-        300,
-        350
-    );
-
-    rc.font="22px Arial";
-
-    rc.fillText(
-        "Press ENTER to play again",
-        300,
-        410
-    );
-
-    rc.fillText(
+    raceCtx.fillText(
         "Press M for menu",
         300,
-        450
+        430
     );
 }
 
 
-document.addEventListener("keydown",function(e){
+function raceLoop(timestamp) {
 
-    if(
-        e.key==="Enter" &&
-        !raceRunning &&
-        document
-        .getElementById("raceScreen")
-        .classList.contains("active")
-    ){
-
-        startRace(raceDifficulty);
+    if (!raceRunning) {
+        return;
     }
 
-    if(
-        e.key.toLowerCase()==="m" &&
-        !raceRunning &&
-        document
-        .getElementById("raceScreen")
-        .classList.contains("active")
-    ){
+    if (!racePaused) {
 
-        openRaceMenu();
+        raceElapsed =
+            (performance.now() - raceStartTime) / 1000;
+
+        document.getElementById("raceTime").textContent =
+            Math.floor(raceElapsed);
+
+        document.getElementById("raceScore").textContent =
+            Math.floor(raceElapsed);
+
+
+        drawRaceRoad();
+
+
+        /*
+            Move road markings downward
+            to make the road look like it is moving.
+        */
+
+        let roadOffset =
+            (performance.now() / 5) % 100;
+
+        raceCtx.fillStyle = "#fff";
+
+        for (let y = -100; y < 700; y += 100) {
+            raceCtx.fillRect(
+                295,
+                y + roadOffset,
+                10,
+                55
+            );
+        }
+
+
+        /*
+            Create enemies.
+        */
+
+        let enemyDelay = 1000;
+
+        if (raceDifficulty === "medium") {
+            enemyDelay = 800;
+        }
+
+        if (raceDifficulty === "hard") {
+            enemyDelay = 600;
+        }
+
+        if (
+            performance.now() - lastEnemyTime >
+            enemyDelay
+        ) {
+            createEnemy();
+            lastEnemyTime = performance.now();
+        }
+
+
+        /*
+            Move enemies.
+        */
+
+        for (let i = enemyCars.length - 1; i >= 0; i--) {
+
+            let enemy = enemyCars[i];
+
+            enemy.y += enemy.speed;
+
+            drawCar(enemy, enemy.color);
+
+
+            if (rectanglesCollide(playerCar, enemy)) {
+                showRaceGameOver();
+                return;
+            }
+
+
+            if (enemy.y > 750) {
+                enemyCars.splice(i, 1);
+            }
+        }
+
+
+        /*
+            Draw player.
+        */
+
+        drawCar(playerCar, "#e74c3c");
     }
 
-});
 
-
-function drawRace(){
-
-    drawRoad();
-
-    raceEnemies.forEach(function(car){
-
-        drawCar(
-            car.x,
-            car.y,
-            car.color,
-            false
-        );
-    });
-
-    drawCar(
-        playerX,
-        playerY,
-        "#00e5ff",
-        true
-    );
-
-    if(racePaused){
-
-        rc.fillStyle="rgba(0,0,0,.7)";
-        rc.fillRect(0,0,600,700);
-
-        rc.fillStyle="white";
-
-        rc.font="bold 55px Arial";
-        rc.textAlign="center";
-
-        rc.fillText(
-            "PAUSED",
-            300,
-            340
-        );
-    }
-}
-
-
-function raceLoop(now){
-
-    if(!raceRunning)return;
-
-    raceFrame=
+    raceAnimation =
         requestAnimationFrame(raceLoop);
+}
 
-    if(racePaused){
 
-        drawRace();
+function pauseRace() {
+
+    if (!raceRunning) {
+        return;
+    }
+
+    racePaused = !racePaused;
+}
+
+
+/* Racing keyboard controls */
+
+document.addEventListener("keydown", function(event) {
+
+    if (!raceRunning || racePaused) {
+
+        if (
+            raceGameOver &&
+            event.key.toLowerCase() === "r"
+        ) {
+            startRacing(raceDifficulty);
+        }
+
+        if (
+            raceGameOver &&
+            event.key.toLowerCase() === "m"
+        ) {
+            showRacingMenu();
+        }
+
         return;
     }
 
 
-    raceElapsed=
-        (now-raceStart)/1000;
+    if (
+        event.key === "ArrowLeft" ||
+        event.key.toLowerCase() === "a"
+    ) {
 
-    /*
-       SCORE = one point for every second
-       survived.
-    */
+        playerCar.x -= playerCar.speed;
 
-    raceScore=
-        Math.floor(raceElapsed);
-
-
-    document.getElementById("raceTime").textContent=
-        Math.floor(raceElapsed);
-
-    document.getElementById("raceScore").textContent=
-        raceScore;
-
-
-    let settings=
-        raceSettings[raceDifficulty];
-
-
-    if(
-        raceKeys["arrowleft"] ||
-        raceKeys["a"]
-    ){
-
-        playerX-=7;
-    }
-
-
-    if(
-        raceKeys["arrowright"] ||
-        raceKeys["d"]
-    ){
-
-        playerX+=7;
-    }
-
-
-    if(playerX<110)playerX=110;
-    if(playerX>430)playerX=430;
-
-
-    roadOffset+=settings.speed;
-
-    if(roadOffset>120){
-        roadOffset-=120;
-    }
-
-
-    spawnTimer++;
-
-    if(spawnTimer>=settings.spawn){
-
-        spawnRaceEnemy();
-
-        spawnTimer=0;
-    }
-
-
-    raceEnemies.forEach(function(car){
-
-        car.y+=car.speed;
-    });
-
-
-    raceEnemies=
-        raceEnemies.filter(function(car){
-
-            return car.y<750;
-        });
-
-
-    let player={
-
-        x:playerX,
-        y:playerY,
-        width:60,
-        height:100
-    };
-
-
-    for(let car of raceEnemies){
-
-        if(raceCollision(player,car)){
-
-            raceGameOver();
-            return;
+        if (playerCar.x < 105) {
+            playerCar.x = 105;
         }
     }
 
 
-    drawRace();
-}
+    if (
+        event.key === "ArrowRight" ||
+        event.key.toLowerCase() === "d"
+    ) {
+
+        playerCar.x += playerCar.speed;
+
+        if (playerCar.x > 445) {
+            playerCar.x = 445;
+        }
+    }
+});
 
 
 /* =========================================================
    GEOMETRY DASH
 ========================================================= */
 
-const geoCanvas=
+const geoCanvas =
     document.getElementById("geoCanvas");
 
-const gc=
+const geoCtx =
     geoCanvas.getContext("2d");
 
+let geoRunning = false;
+let geoPaused = false;
+let geoGameOver = false;
 
-const GW=1000;
-const GH=600;
-const GROUND=500;
+let currentLevel = 1;
 
+let playerWorldX = 150;
+let playerY = 450;
 
-let geoRunning=false;
-let geoPaused=false;
+let playerVelocityY = 0;
 
-let geoLevel=1;
+let playerOnGround = true;
 
-let geoFrame;
+let cameraX = 0;
 
-let geoStart=0;
-let geoElapsed=0;
+let geoStartTime = 0;
+let geoElapsed = 0;
 
-let geoSpeed=6;
+let geoSpeed = 6;
 
+let geoAnimation;
 
-/*
-   IMPORTANT FIX:
+let geoObstacles = [];
 
-   playerWorldX is the REAL position
-   of the character.
+let geoFinishX = 3000;
 
-   cameraX follows behind it.
-
-   This means the character actually
-   moves forward instead of staying
-   frozen while only the camera moves.
-*/
-
-let playerWorldX=150;
-
-let playerY=455;
-
-let playerSize=45;
-
-let playerVelocity=0;
-
-let playerOnGround=true;
-
-let cameraX=0;
-
-let geoObstacles=[];
-
-let particles=[];
+let jumpPressed = false;
 
 
-const levelData=[
+/* Level data */
 
-{
- speed:5.5,
- obs:[
-  [600,"spike"],
-  [900,"spike"],
-  [1200,"block"],
-  [1500,"spike"],
-  [1800,"spike"],
-  [2100,"block"]
- ]
-},
+const levels = [
 
-{
- speed:6,
- obs:[
-  [550,"spike"],
-  [750,"spike"],
-  [1000,"block"],
-  [1250,"spike"],
-  [1500,"spike"],
-  [1800,"block"],
-  [2050,"spike"]
- ]
-},
+    {
+        speed: 5,
+        obstacles: [
+            [500, 500, 50, 100],
+            [800, 450, 50, 150],
+            [1100, 500, 50, 100],
+            [1450, 450, 50, 150],
+            [1800, 500, 50, 100],
+            [2200, 450, 50, 150]
+        ]
+    },
 
-{
- speed:6.5,
- obs:[
-  [500,"spike"],
-  [700,"spike"],
-  [900,"spike"],
-  [1150,"block"],
-  [1400,"spike"],
-  [1650,"spike"],
-  [1900,"block"],
-  [2150,"spike"]
- ]
-},
+    {
+        speed: 5.5,
+        obstacles: [
+            [450, 500, 50, 100],
+            [650, 500, 50, 100],
+            [900, 420, 50, 180],
+            [1200, 500, 50, 100],
+            [1500, 450, 50, 150],
+            [1800, 400, 50, 200],
+            [2150, 500, 50, 100],
+            [2500, 450, 50, 150]
+        ]
+    },
 
-{
- speed:7,
- obs:[
-  [500,"spike"],
-  [650,"spike"],
-  [850,"block"],
-  [1050,"spike"],
-  [1250,"spike"],
-  [1450,"block"],
-  [1650,"spike"],
-  [1850,"spike"],
-  [2100,"block"]
- ]
-},
+    {
+        speed: 6,
+        obstacles: [
+            [500, 500, 50, 100],
+            [700, 450, 50, 150],
+            [950, 400, 50, 200],
+            [1250, 500, 50, 100],
+            [1450, 400, 50, 200],
+            [1750, 450, 50, 150],
+            [2050, 350, 50, 250],
+            [2400, 450, 50, 150]
+        ]
+    },
 
-{
- speed:7.5,
- obs:[
-  [500,"spike"],
-  [650,"spike"],
-  [800,"spike"],
-  [1000,"block"],
-  [1200,"spike"],
-  [1400,"spike"],
-  [1600,"block"],
-  [1800,"spike"],
-  [2000,"spike"],
-  [2250,"block"]
- ]
-},
+    {
+        speed: 6.5,
+        obstacles: [
+            [450, 450, 50, 150],
+            [650, 450, 50, 150],
+            [850, 400, 50, 200],
+            [1100, 350, 50, 250],
+            [1400, 450, 50, 150],
+            [1600, 400, 50, 200],
+            [1900, 350, 50, 250],
+            [2250, 400, 50, 200],
+            [2550, 450, 50, 150]
+        ]
+    },
 
-{
- speed:8,
- obs:[
-  [500,"spike"],
-  [620,"spike"],
-  [740,"spike"],
-  [900,"block"],
-  [1100,"spike"],
-  [1250,"spike"],
-  [1450,"block"],
-  [1650,"spike"],
-  [1780,"spike"],
-  [1950,"block"],
-  [2200,"spike"]
- ]
-},
+    {
+        speed: 7,
+        obstacles: [
+            [450, 500, 50, 100],
+            [600, 450, 50, 150],
+            [800, 400, 50, 200],
+            [1050, 500, 50, 100],
+            [1200, 350, 50, 250],
+            [1500, 400, 50, 200],
+            [1750, 300, 50, 300],
+            [2050, 400, 50, 200],
+            [2350, 350, 50, 250],
+            [2700, 400, 50, 200]
+        ]
+    },
 
-{
- speed:8.5,
- obs:[
-  [480,"spike"],
-  [600,"spike"],
-  [720,"spike"],
-  [850,"spike"],
-  [1050,"block"],
-  [1250,"spike"],
-  [1370,"spike"],
-  [1550,"block"],
-  [1750,"spike"],
-  [1900,"spike"],
-  [2100,"block"],
-  [2350,"spike"]
- ]
-},
+    {
+        speed: 7.5,
+        obstacles: [
+            [450, 400, 50, 200],
+            [650, 350, 50, 250],
+            [900, 450, 50, 150],
+            [1100, 300, 50, 300],
+            [1400, 400, 50, 200],
+            [1650, 350, 50, 250],
+            [1900, 300, 50, 300],
+            [2200, 400, 50, 200],
+            [2500, 350, 50, 250],
+            [2850, 400, 50, 200]
+        ]
+    },
 
-{
- speed:9,
- obs:[
-  [450,"spike"],
-  [560,"spike"],
-  [670,"spike"],
-  [780,"spike"],
-  [950,"block"],
-  [1150,"spike"],
-  [1260,"spike"],
-  [1450,"block"],
-  [1650,"spike"],
-  [1760,"spike"],
-  [1880,"spike"],
-  [2050,"block"],
-  [2300,"spike"]
- ]
-},
+    {
+        speed: 8,
+        obstacles: [
+            [450, 450, 50, 150],
+            [600, 350, 50, 250],
+            [850, 300, 50, 300],
+            [1100, 400, 50, 200],
+            [1350, 300, 50, 300],
+            [1600, 350, 50, 250],
+            [1900, 250, 50, 350],
+            [2200, 350, 50, 250],
+            [2500, 300, 50, 300],
+            [2850, 350, 50, 250]
+        ]
+    },
 
-{
- speed:9.5,
- obs:[
-  [450,"spike"],
-  [550,"spike"],
-  [650,"spike"],
-  [750,"spike"],
-  [900,"block"],
-  [1080,"spike"],
-  [1180,"spike"],
-  [1280,"spike"],
-  [1450,"block"],
-  [1630,"spike"],
-  [1730,"spike"],
-  [1830,"spike"],
-  [2000,"block"],
-  [2300,"spike"]
- ]
-},
+    {
+        speed: 8.5,
+        obstacles: [
+            [450, 400, 50, 200],
+            [600, 300, 50, 300],
+            [850, 350, 50, 250],
+            [1050, 250, 50, 350],
+            [1350, 350, 50, 250],
+            [1550, 300, 50, 300],
+            [1800, 250, 50, 350],
+            [2100, 350, 50, 250],
+            [2350, 300, 50, 300],
+            [2650, 250, 50, 350],
+            [3000, 350, 50, 250]
+        ]
+    },
 
-{
- speed:10,
- obs:[
-  [430,"spike"],
-  [530,"spike"],
-  [630,"spike"],
-  [730,"spike"],
-  [830,"spike"],
-  [1000,"block"],
-  [1170,"spike"],
-  [1270,"spike"],
-  [1370,"spike"],
-  [1500,"block"],
-  [1670,"spike"],
-  [1770,"spike"],
-  [1870,"spike"],
-  [2050,"block"],
-  [2250,"spike"],
-  [2500,"block"]
- ]
-}
+    {
+        speed: 9,
+        obstacles: [
+            [450, 350, 50, 250],
+            [650, 250, 50, 350],
+            [900, 300, 50, 300],
+            [1150, 200, 50, 400],
+            [1450, 300, 50, 300],
+            [1700, 250, 50, 350],
+            [2000, 200, 50, 400],
+            [2300, 300, 50, 300],
+            [2600, 250, 50, 350],
+            [2900, 200, 50, 400]
+        ]
+    },
+
+    {
+        speed: 10,
+        obstacles: [
+            [450, 300, 50, 300],
+            [650, 200, 50, 400],
+            [900, 250, 50, 350],
+            [1150, 150, 50, 450],
+            [1450, 250, 50, 350],
+            [1700, 200, 50, 400],
+            [2000, 150, 50, 450],
+            [2300, 250, 50, 350],
+            [2600, 200, 50, 400],
+            [2900, 150, 50, 450],
+            [3250, 250, 50, 350]
+        ]
+    }
 
 ];
 
 
-/* LEVEL BUTTONS */
+/* Create level buttons */
 
-function createLevelButtons(){
+const levelButtons =
+    document.getElementById("levelButtons");
 
-    let box=
-        document.getElementById("levels");
+for (let i = 1; i <= 10; i++) {
 
-    box.innerHTML="";
+    let button =
+        document.createElement("button");
 
-    for(let i=1;i<=10;i++){
+    button.textContent =
+        "Level " + i;
 
-        let b=
-            document.createElement("button");
+    button.onclick = function() {
+        startGeometry(i);
+    };
 
-        b.textContent=
-            "LEVEL "+i;
-
-        b.onclick=
-            function(){
-                startGeo(i);
-            };
-
-        box.appendChild(b);
-    }
-}
-
-createLevelButtons();
-
-
-function openGeoMenu(){
-
-    stopGeo();
-    stopRace();
-
-    showScreen("geoMenu");
+    levelButtons.appendChild(button);
 }
 
 
-function startGeo(level){
+/* Start Geometry Dash */
 
-    geoLevel=level;
+function startGeometry(level) {
 
-    let settings=
-        levelData[level-1];
+    currentLevel = level;
 
-    geoSpeed=
-        settings.speed;
+    startGameScreen("geometryGameScreen");
 
-    playerWorldX=150;
+    geoRunning = true;
+    geoPaused = false;
+    geoGameOver = false;
 
-    playerY=
-        GROUND-playerSize;
+    playerWorldX = 150;
 
-    playerVelocity=0;
+    playerY = 450;
 
-    playerOnGround=true;
+    playerVelocityY = 0;
 
-    cameraX=0;
+    playerOnGround = true;
 
-    geoElapsed=0;
+    /*
+       IMPORTANT:
+       Camera starts at zero.
 
-    geoStart=
+       This means the character begins at
+       x = 150 on the screen and visibly
+       moves toward the right.
+    */
+
+    cameraX = 0;
+
+    geoSpeed =
+        levels[level - 1].speed;
+
+    geoObstacles =
+        levels[level - 1].obstacles;
+
+    geoFinishX =
+        geoObstacles[geoObstacles.length - 1][0] + 350;
+
+    geoStartTime =
         performance.now();
 
-    particles=[];
+    geoElapsed = 0;
 
-    geoObstacles=
-        settings.obs.map(function(o){
+    document.getElementById(
+        "geoLevelText"
+    ).textContent = level;
 
-            return{
-                x:o[0],
-                type:o[1]
-            };
-        });
+    document.getElementById(
+        "geoTime"
+    ).textContent = "0";
 
+    cancelAnimationFrame(geoAnimation);
 
-    geoRunning=true;
-    geoPaused=false;
-
-    showScreen("geoScreen");
-
-    cancelAnimationFrame(geoFrame);
-
-    geoFrame=
-        requestAnimationFrame(geoLoop);
+    geometryLoop();
 }
 
 
-function stopGeo(){
+/* Draw Geometry background */
 
-    geoRunning=false;
-    geoPaused=false;
+function drawGeometryBackground() {
 
-    cancelAnimationFrame(geoFrame);
-}
+    /*
+       Sky
+    */
 
+    geoCtx.fillStyle = "#07152b";
 
-/* JUMP */
-
-function geoJump(){
-
-    if(!geoRunning)return;
-    if(geoPaused)return;
-
-    if(playerOnGround){
-
-        playerVelocity=-15;
-
-        playerOnGround=false;
-
-        jumpParticles();
-    }
-}
+    geoCtx.fillRect(
+        0,
+        0,
+        geoCanvas.width,
+        geoCanvas.height
+    );
 
 
-document.addEventListener("keydown",function(e){
+    /*
+       Background squares
+    */
 
-    if(
-        e.code==="Space" ||
-        e.key==="ArrowUp" ||
-        e.key.toLowerCase()==="w"
-    ){
+    geoCtx.fillStyle = "#10294d";
 
-        if(
-            document
-            .getElementById("geoScreen")
-            .classList.contains("active")
-        ){
+    for (
+        let x = -100 - (cameraX % 100);
+        x < 1100;
+        x += 100
+    ) {
 
-            e.preventDefault();
+        for (
+            let y = 50;
+            y < 400;
+            y += 100
+        ) {
 
-            geoJump();
+            geoCtx.fillRect(
+                x,
+                y,
+                60,
+                60
+            );
         }
     }
 
-    if(
-        e.key==="Escape" &&
-        geoRunning
-    ){
 
-        toggleGeoPause();
+    /*
+       Ground
+    */
+
+    geoCtx.fillStyle = "#222";
+
+    geoCtx.fillRect(
+        0,
+        550,
+        1000,
+        50
+    );
+
+    geoCtx.fillStyle = "#00ff88";
+
+    geoCtx.fillRect(
+        0,
+        550,
+        1000,
+        8
+    );
+}
+
+
+/* Draw obstacles */
+
+function drawGeometryObstacles() {
+
+    for (let obstacle of geoObstacles) {
+
+        let x =
+            obstacle[0] - cameraX;
+
+        let y =
+            obstacle[1];
+
+        let width =
+            obstacle[2];
+
+        let height =
+            obstacle[3];
+
+        /*
+           Block
+        */
+
+        geoCtx.fillStyle = "#e74c3c";
+
+        geoCtx.fillRect(
+            x,
+            y,
+            width,
+            height
+        );
+
+        /*
+           Top
+        */
+
+        geoCtx.fillStyle = "#ff7675";
+
+        geoCtx.fillRect(
+            x,
+            y,
+            width,
+            8
+        );
+
+
+        /*
+           Only draw if visible.
+        */
+
+        if (
+            x > -100 &&
+            x < 1100
+        ) {
+
+            geoCtx.strokeStyle = "#fff";
+
+            geoCtx.lineWidth = 2;
+
+            geoCtx.strokeRect(
+                x,
+                y,
+                width,
+                height
+            );
+        }
+    }
+}
+
+
+/* Draw finish */
+
+function drawFinishLine() {
+
+    let x =
+        geoFinishX - cameraX;
+
+    if (x > -100 && x < 1100) {
+
+        geoCtx.fillStyle = "#fff";
+
+        geoCtx.fillRect(
+            x,
+            100,
+            8,
+            450
+        );
+
+        geoCtx.font =
+            "bold 25px Arial";
+
+        geoCtx.fillStyle =
+            "#ffff00";
+
+        geoCtx.fillText(
+            "FINISH",
+            x - 35,
+            90
+        );
+    }
+}
+
+
+/* Draw player */
+
+function drawGeometryPlayer() {
+
+    /*
+       THIS IS THE IMPORTANT PART.
+
+       The character's screen position is:
+
+       playerWorldX - cameraX
+
+       At the beginning:
+       playerWorldX = 150
+       cameraX = 0
+
+       So the character is clearly at x=150.
+
+       As the player moves:
+       150 -> 200 -> 300 -> 400 -> 500 -> 600...
+
+       The camera DOES NOT move until the
+       character reaches x=650.
+    */
+
+    let screenX =
+        playerWorldX - cameraX;
+
+    let size = 50;
+
+    /*
+       Character shadow
+    */
+
+    geoCtx.fillStyle =
+        "rgba(0,0,0,0.35)";
+
+    geoCtx.fillRect(
+        screenX + 5,
+        playerY + size + 5,
+        size - 10,
+        8
+    );
+
+
+    /*
+       Character
+    */
+
+    geoCtx.save();
+
+    geoCtx.translate(
+        screenX + size / 2,
+        playerY + size / 2
+    );
+
+
+    /*
+       Rotation while jumping.
+    */
+
+    if (!playerOnGround) {
+        geoCtx.rotate(
+            playerWorldX * 0.08
+        );
     }
 
-});
+
+    geoCtx.fillStyle = "#00ff88";
+
+    geoCtx.fillRect(
+        -size / 2,
+        -size / 2,
+        size,
+        size
+    );
 
 
-geoCanvas.addEventListener(
-    "mousedown",
-    function(){
-        geoJump();
+    geoCtx.strokeStyle = "#ffffff";
+
+    geoCtx.lineWidth = 3;
+
+    geoCtx.strokeRect(
+        -size / 2,
+        -size / 2,
+        size,
+        size
+    );
+
+
+    /*
+       Eyes
+    */
+
+    geoCtx.fillStyle = "#111";
+
+    geoCtx.fillRect(
+        -15,
+        -10,
+        10,
+        10
+    );
+
+    geoCtx.fillRect(
+        5,
+        -10,
+        10,
+        10
+    );
+
+
+    /*
+       Mouth
+    */
+
+    geoCtx.fillRect(
+        -12,
+        10,
+        24,
+        5
+    );
+
+
+    geoCtx.restore();
+
+
+    /*
+       Movement trail.
+
+       This makes the horizontal movement
+       even easier to see.
+    */
+
+    geoCtx.fillStyle =
+        "rgba(0,255,136,0.25)";
+
+    geoCtx.fillRect(
+        screenX - 35,
+        playerY + 15,
+        25,
+        20
+    );
+}
+
+
+/* Jump */
+
+function geometryJump() {
+
+    if (
+        geoRunning &&
+        !geoPaused &&
+        playerOnGround
+    ) {
+
+        playerVelocityY = -15;
+
+        playerOnGround = false;
+    }
+}
+
+
+/* Keyboard controls */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        /*
+           Geometry Dash jump controls.
+        */
+
+        if (
+            event.code === "Space" ||
+            event.key === "ArrowUp" ||
+            event.key.toLowerCase() === "w"
+        ) {
+
+            if (
+                geoRunning &&
+                !geoPaused
+            ) {
+
+                event.preventDefault();
+
+                geometryJump();
+            }
+        }
+
+
+        /*
+           Restart after crash.
+        */
+
+        if (
+            geoGameOver &&
+            event.key.toLowerCase() === "r"
+        ) {
+
+            startGeometry(currentLevel);
+        }
+
+
+        /*
+           Menu after crash.
+        */
+
+        if (
+            geoGameOver &&
+            event.key.toLowerCase() === "m"
+        ) {
+
+            showGeometryMenu();
+        }
     }
 );
 
 
-/* PARTICLES */
+/* Mouse / touch jump */
 
-function jumpParticles(){
+geoCanvas.addEventListener(
+    "mousedown",
+    function() {
 
-    for(let i=0;i<12;i++){
-
-        particles.push({
-
-            x:playerWorldX+
-              playerSize/2,
-
-            y:playerY+
-              playerSize,
-
-            vx:(Math.random()-.5)*5,
-
-            vy:Math.random()*3,
-
-            life:30
-        });
+        geometryJump();
     }
-}
+);
 
 
-function runParticles(){
+/* Collision */
 
-    if(Math.random()>.35)return;
+function geometryCollision() {
 
-    particles.push({
+    let playerSize = 50;
 
-        x:playerWorldX,
+    let playerLeft =
+        playerWorldX;
 
-        y:playerY+playerSize,
+    let playerRight =
+        playerWorldX + playerSize;
 
-        vx:-2,
+    let playerTop =
+        playerY;
 
-        vy:Math.random()-0.5,
+    let playerBottom =
+        playerY + playerSize;
 
-        life:20
-    });
-}
 
+    for (let obstacle of geoObstacles) {
 
-function updateParticles(){
+        let obstacleLeft =
+            obstacle[0];
 
-    particles.forEach(function(p){
+        let obstacleTop =
+            obstacle[1];
 
-        p.x+=p.vx;
-        p.y+=p.vy;
+        let obstacleRight =
+            obstacle[0] + obstacle[2];
 
-        p.vy+=.15;
+        let obstacleBottom =
+            obstacle[1] + obstacle[3];
 
-        p.life--;
-    });
 
-    particles=
-        particles.filter(
-            function(p){
-                return p.life>0;
-            }
-        );
-}
+        if (
+            playerRight > obstacleLeft &&
+            playerLeft < obstacleRight &&
+            playerBottom > obstacleTop &&
+            playerTop < obstacleBottom
+        ) {
 
-
-function drawParticles(){
-
-    particles.forEach(function(p){
-
-        let sx=
-            p.x-cameraX;
-
-        gc.fillStyle=
-            "rgba(255,255,255,"+
-            p.life/30+
-            ")";
-
-        gc.fillRect(
-            sx,
-            p.y,
-            6,
-            6
-        );
-    });
-}
-
-
-/* PLAYER */
-
-function drawPlayer(){
-
-    /*
-       The player screen position changes
-       while moving.
-
-       Camera follows more slowly,
-       making the forward movement visible.
-    */
-
-    let screenX=
-        playerWorldX-cameraX;
-
-    gc.save();
-
-    gc.translate(
-        screenX+playerSize/2,
-        playerY+playerSize/2
-    );
-
-    gc.rotate(
-        playerVelocity*.025
-    );
-
-    gc.fillStyle="#00e5ff";
-
-    gc.fillRect(
-        -playerSize/2,
-        -playerSize/2,
-        playerSize,
-        playerSize
-    );
-
-    gc.fillStyle="#111";
-
-    gc.fillRect(-10,-10,7,7);
-    gc.fillRect(4,-10,7,7);
-
-    gc.fillRect(-9,5,20,5);
-
-    gc.restore();
-}
-
-
-/* SPIKE */
-
-function drawSpike(worldX){
-
-    let x=
-        worldX-cameraX;
-
-    gc.fillStyle="#ff3333";
-
-    gc.beginPath();
-
-    gc.moveTo(x,GROUND);
-
-    gc.lineTo(
-        x+25,
-        GROUND-50
-    );
-
-    gc.lineTo(
-        x+50,
-        GROUND
-    );
-
-    gc.closePath();
-
-    gc.fill();
-}
-
-
-/* BLOCK */
-
-function drawBlock(worldX){
-
-    let x=
-        worldX-cameraX;
-
-    gc.fillStyle="#9b59b6";
-
-    gc.fillRect(
-        x,
-        GROUND-50,
-        55,
-        50
-    );
-
-    gc.strokeStyle="white";
-    gc.lineWidth=3;
-
-    gc.strokeRect(
-        x,
-        GROUND-50,
-        55,
-        50
-    );
-}
-
-
-/* COLLISION */
-
-function geoCollision(){
-
-    let px=playerWorldX;
-    let py=playerY;
-    let s=playerSize;
-
-    for(let o of geoObstacles){
-
-        if(
-            o.x>px+s+60 ||
-            o.x+60<px-60
-        ){
-
-            continue;
-        }
-
-
-        if(o.type==="spike"){
-
-            if(
-                px+s>o.x+8 &&
-                px<o.x+42 &&
-                py+s>GROUND-45 &&
-                py<GROUND
-            ){
-
-                return true;
-            }
-
-        }else{
-
-            if(
-                px+s>o.x &&
-                px<o.x+55 &&
-                py+s>GROUND-50 &&
-                py<GROUND
-            ){
-
-                return true;
-            }
+            return true;
         }
     }
 
@@ -1334,513 +1303,306 @@ function geoCollision(){
 }
 
 
-/* FINISH */
+/* Game over */
 
-function getFinishX(){
+function showGeometryGameOver() {
 
-    return(
-        geoObstacles[
-            geoObstacles.length-1
-        ].x+300
-    );
-}
+    geoRunning = false;
 
+    geoGameOver = true;
 
-function drawFinish(){
+    geoCtx.fillStyle =
+        "rgba(0,0,0,0.75)";
 
-    let finish=
-        getFinishX();
-
-    let x=
-        finish-cameraX;
-
-    if(
-        x>-100 &&
-        x<GW+100
-    ){
-
-        gc.fillStyle="white";
-
-        gc.fillRect(
-            x,
-            250,
-            10,
-            250
-        );
-
-
-        let size=20;
-
-        for(
-            let row=0;
-            row<8;
-            row++
-        ){
-
-            for(
-                let col=0;
-                col<2;
-                col++
-            ){
-
-                gc.fillStyle=
-                    (row+col)%2===0
-                    ? "#111"
-                    : "#fff";
-
-                gc.fillRect(
-                    x+10+col*size,
-                    250+row*size,
-                    size,
-                    size
-                );
-            }
-        }
-
-
-        gc.fillStyle="white";
-
-        gc.font="bold 24px Arial";
-
-        gc.textAlign="left";
-
-        gc.fillText(
-            "FINISH",
-            x-20,
-            230
-        );
-    }
-}
-
-
-/* BACKGROUND */
-
-function drawGeoBackground(){
-
-    gc.fillStyle="#161625";
-
-    gc.fillRect(
+    geoCtx.fillRect(
         0,
         0,
-        GW,
-        GH
+        1000,
+        600
     );
 
 
-    gc.strokeStyle="#292945";
+    geoCtx.fillStyle =
+        "#ff3333";
 
-    gc.lineWidth=2;
+    geoCtx.font =
+        "bold 60px Arial";
 
+    geoCtx.textAlign =
+        "center";
 
-    /*
-       Moving background grid.
-    */
-
-    let gridOffset=
-        -(cameraX%50);
-
-    for(
-        let x=gridOffset;
-        x<GW;
-        x+=50
-    ){
-
-        gc.beginPath();
-
-        gc.moveTo(x,0);
-        gc.lineTo(x,GROUND);
-
-        gc.stroke();
-    }
-
-
-    gc.fillStyle="#222";
-
-    gc.fillRect(
-        0,
-        GROUND,
-        GW,
-        GH-GROUND
-    );
-
-
-    gc.fillStyle="#00e5ff";
-
-    gc.fillRect(
-        0,
-        GROUND,
-        GW,
-        5
-    );
-}
-
-
-/* DRAW GEOMETRY */
-
-function drawGeo(){
-
-    drawGeoBackground();
-
-    drawFinish();
-
-
-    geoObstacles.forEach(
-        function(o){
-
-            if(o.type==="spike"){
-
-                drawSpike(o.x);
-
-            }else{
-
-                drawBlock(o.x);
-            }
-        }
-    );
-
-
-    drawParticles();
-
-    drawPlayer();
-
-
-    gc.fillStyle="white";
-
-    gc.font="bold 22px Arial";
-
-    gc.textAlign="left";
-
-    gc.fillText(
-        "LEVEL "+geoLevel,
-        20,
-        35
-    );
-}
-
-
-/* CRASH */
-
-function geoCrash(){
-
-    geoRunning=false;
-
-    drawGeo();
-
-    gc.fillStyle=
-        "rgba(0,0,0,.75)";
-
-    gc.fillRect(
-        0,
-        0,
-        GW,
-        GH
-    );
-
-    gc.fillStyle="#ff3333";
-
-    gc.font="bold 65px Arial";
-
-    gc.textAlign="center";
-
-    gc.fillText(
-        "CRASH!",
-        GW/2,
-        260
-    );
-
-    gc.fillStyle="white";
-
-    gc.font="25px Arial";
-
-    gc.fillText(
-        "Restarting...",
-        GW/2,
-        315
-    );
-
-
-    setTimeout(function(){
-
-        if(
-            document
-            .getElementById("geoScreen")
-            .classList.contains("active")
-        ){
-
-            startGeo(geoLevel);
-        }
-
-    },700);
-}
-
-
-/* COMPLETE */
-
-function geoComplete(){
-
-    geoRunning=false;
-
-    drawGeo();
-
-    gc.fillStyle=
-        "rgba(0,0,0,.72)";
-
-    gc.fillRect(
-        0,
-        0,
-        GW,
-        GH
-    );
-
-    gc.fillStyle="#00ff88";
-
-    gc.font="bold 60px Arial";
-
-    gc.textAlign="center";
-
-    gc.fillText(
-        "LEVEL COMPLETE!",
-        GW/2,
+    geoCtx.fillText(
+        "GAME OVER",
+        500,
         250
     );
 
-    gc.fillStyle="white";
 
-    gc.font="bold 30px Arial";
+    geoCtx.fillStyle =
+        "#fff";
 
-    gc.fillText(
-        "Time: "+
-        Math.floor(geoElapsed)+
+    geoCtx.font =
+        "bold 28px Arial";
+
+    geoCtx.fillText(
+        "Level " + currentLevel,
+        500,
+        300
+    );
+
+
+    geoCtx.font =
+        "22px Arial";
+
+    geoCtx.fillText(
+        "Press R to restart",
+        500,
+        360
+    );
+
+    geoCtx.fillText(
+        "Press M for menu",
+        500,
+        400
+    );
+}
+
+
+/* Level complete */
+
+function showGeometryWin() {
+
+    geoRunning = false;
+
+    geoGameOver = true;
+
+    geoCtx.fillStyle =
+        "rgba(0,0,0,0.75)";
+
+    geoCtx.fillRect(
+        0,
+        0,
+        1000,
+        600
+    );
+
+
+    geoCtx.fillStyle =
+        "#00ff88";
+
+    geoCtx.font =
+        "bold 60px Arial";
+
+    geoCtx.textAlign =
+        "center";
+
+    geoCtx.fillText(
+        "LEVEL COMPLETE!",
+        500,
+        250
+    );
+
+
+    geoCtx.fillStyle =
+        "#fff";
+
+    geoCtx.font =
+        "bold 28px Arial";
+
+    geoCtx.fillText(
+        "Time: " +
+        Math.floor(geoElapsed) +
         " seconds",
-        GW/2,
+        500,
         310
     );
 
-    gc.font="22px Arial";
 
-    if(geoLevel<10){
+    geoCtx.font =
+        "22px Arial";
 
-        gc.fillText(
-            "Press ENTER for next level",
-            GW/2,
-            370
-        );
+    geoCtx.fillText(
+        "Press R to play again",
+        500,
+        370
+    );
 
-    }else{
-
-        gc.fillText(
-            "YOU BEAT ALL 10 LEVELS!",
-            GW/2,
-            370
-        );
-    }
-
-    gc.fillText(
-        "Press L for levels",
-        GW/2,
+    geoCtx.fillText(
+        "Press M for levels",
+        500,
         410
     );
 }
 
 
-/* PAUSE */
+/* Geometry game loop */
 
-function toggleGeoPause(){
+function geometryLoop() {
 
-    if(!geoRunning)return;
-
-    geoPaused=!geoPaused;
-
-    if(!geoPaused){
-
-        geoStart=
-            performance.now()-
-            geoElapsed*1000;
-
-        geoFrame=
-            requestAnimationFrame(
-                geoLoop
-            );
+    if (!geoRunning) {
+        return;
     }
-}
 
 
-function drawGeoPause(){
+    if (!geoPaused) {
 
-    gc.fillStyle=
-        "rgba(0,0,0,.7)";
+        /*
+           TIME
+        */
 
-    gc.fillRect(
-        0,
-        0,
-        GW,
-        GH
-    );
+        geoElapsed =
+            (performance.now() -
+             geoStartTime) / 1000;
 
-    gc.fillStyle="white";
-
-    gc.font="bold 60px Arial";
-
-    gc.textAlign="center";
-
-    gc.fillText(
-        "PAUSED",
-        GW/2,
-        280
-    );
-}
+        document.getElementById(
+            "geoTime"
+        ).textContent =
+            Math.floor(geoElapsed);
 
 
-/* MAIN GEOMETRY LOOP */
+        /*
+           =================================================
+           CHARACTER MOVEMENT
+           =================================================
 
-function geoLoop(now){
+           The character ALWAYS moves forward.
 
-    if(!geoRunning)return;
+           This is the main fix.
+        */
 
-    geoFrame=
+        playerWorldX += geoSpeed;
+
+
+        /*
+           Gravity
+        */
+
+        playerVelocityY += 0.7;
+
+        playerY += playerVelocityY;
+
+
+        /*
+           Ground
+        */
+
+        let groundY = 500;
+
+        if (playerY >= groundY) {
+
+            playerY = groundY;
+
+            playerVelocityY = 0;
+
+            playerOnGround = true;
+        }
+
+
+        /*
+           =================================================
+           CAMERA DEAD ZONE
+           =================================================
+
+           The camera stays still while the character
+           moves from x=150 toward x=650.
+
+           Only when the character reaches 650 does
+           the camera start moving.
+        */
+
+        let playerScreenX =
+            playerWorldX - cameraX;
+
+
+        const LEFT_ZONE = 180;
+
+        const RIGHT_ZONE = 650;
+
+
+        if (
+            playerScreenX >
+            RIGHT_ZONE
+        ) {
+
+            cameraX =
+                playerWorldX -
+                RIGHT_ZONE;
+        }
+
+
+        if (
+            playerScreenX <
+            LEFT_ZONE
+        ) {
+
+            cameraX =
+                Math.max(
+                    0,
+                    playerWorldX -
+                    LEFT_ZONE
+                );
+        }
+
+
+        /*
+           Draw everything.
+        */
+
+        drawGeometryBackground();
+
+        drawGeometryObstacles();
+
+        drawFinishLine();
+
+        drawGeometryPlayer();
+
+
+        /*
+           Collision
+        */
+
+        if (geometryCollision()) {
+
+            showGeometryGameOver();
+
+            return;
+        }
+
+
+        /*
+           Finish
+        */
+
+        if (
+            playerWorldX >=
+            geoFinishX
+        ) {
+
+            showGeometryWin();
+
+            return;
+        }
+    }
+
+
+    geoAnimation =
         requestAnimationFrame(
-            geoLoop
+            geometryLoop
         );
-
-
-    if(geoPaused){
-
-        drawGeo();
-        drawGeoPause();
-
-        return;
-    }
-
-
-    geoElapsed=
-        (now-geoStart)/1000;
-
-    document.getElementById("geoTime").textContent=
-        Math.floor(geoElapsed);
-
-
-    /*
-       REAL CHARACTER MOVEMENT
-
-       The character's world position moves
-       forward every frame.
-    */
-
-    playerWorldX+=geoSpeed;
-
-
-    /* GRAVITY */
-
-    playerVelocity+=.8;
-
-    playerY+=playerVelocity;
-
-
-    if(
-        playerY+playerSize>=GROUND
-    ){
-
-        playerY=
-            GROUND-playerSize;
-
-        playerVelocity=0;
-
-        playerOnGround=true;
-
-        runParticles();
-
-    }else{
-
-        playerOnGround=false;
-    }
-
-
-    /*
-       CAMERA FOLLOW
-
-       Camera follows the player but does
-       not completely lock the player.
-       This makes the movement visible.
-    */
-
-    let targetCamera=
-        playerWorldX-350;
-
-    cameraX+=
-        (targetCamera-cameraX)*.08;
-
-
-    if(cameraX<0){
-        cameraX=0;
-    }
-
-
-    updateParticles();
-
-
-    if(geoCollision()){
-
-        geoCrash();
-        return;
-    }
-
-
-    if(
-        playerWorldX>=getFinishX()
-    ){
-
-        geoComplete();
-        return;
-    }
-
-
-    drawGeo();
 }
 
 
-/* NEXT LEVEL / LEVEL MENU */
+/* Pause Geometry */
 
-document.addEventListener(
-    "keydown",
-    function(e){
+function pauseGeometry() {
 
-        if(
-            e.key==="Enter" &&
-            !geoRunning &&
-            document
-            .getElementById("geoScreen")
-            .classList.contains("active")
-        ){
-
-            if(geoLevel<10){
-
-                startGeo(geoLevel+1);
-
-            }else{
-
-                openGeoMenu();
-            }
-        }
-
-
-        if(
-            e.key.toLowerCase()==="l" &&
-            !geoRunning &&
-            document
-            .getElementById("geoScreen")
-            .classList.contains("active")
-        ){
-
-            openGeoMenu();
-        }
-
+    if (!geoRunning) {
+        return;
     }
-);
 
-
-/* START */
-
-showScreen("home");
+    geoPaused =
+        !geoPaused;
+}
 
 </script>
 
