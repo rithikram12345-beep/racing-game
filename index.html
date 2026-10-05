@@ -2,2669 +2,1355 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>RITHIK Games</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>rithik Games</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    user-select:none;
-    -webkit-user-select:none;
+* {
+    box-sizing: border-box;
 }
 
-html,body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    font-family:Arial,sans-serif;
-    background:#111;
+body {
+    margin: 0;
+    background: #111;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
 }
 
-.screen{
-    position:absolute;
-    inset:0;
-    display:none;
+h1 {
+    margin: 20px 0;
 }
 
-.screen.active{
-    display:block;
+button {
+    padding: 12px 25px;
+    margin: 8px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    background: #3498db;
+    color: white;
 }
 
-button{
-    border:0;
-    border-radius:12px;
-    padding:15px 25px;
-    font-size:20px;
-    cursor:pointer;
-    background:#fff;
-    color:#111;
-    margin:8px;
+button:hover {
+    opacity: 0.8;
 }
 
-button:active{
-    transform:scale(.95);
+.screen {
+    display: none;
 }
 
-/* HOME */
-
-#home{
-    background:linear-gradient(#182848,#4b6cb7);
-    color:white;
-    text-align:center;
-    padding-top:12vh;
+.active {
+    display: block;
 }
 
-#home h1{
-    font-size:48px;
-    margin-bottom:15px;
+canvas {
+    display: block;
+    margin: 15px auto;
+    border: 3px solid white;
+    max-width: 95vw;
 }
 
-#home p{
-    font-size:20px;
-    margin-bottom:35px;
-}
-
-.gameButton{
-    display:block;
-    width:min(400px,85%);
-    margin:15px auto;
-    font-size:24px;
-    font-weight:bold;
-}
-
-#raceButton{
-    background:#e53935;
-    color:white;
-}
-
-#geoButton{
-    background:#7e57c2;
-    color:white;
-}
-
-#mineButton{
-    background:#43a047;
-    color:white;
-}
-
-/* COMMON GAME UI */
-
-.homeBtn{
-    position:absolute;
-    top:10px;
-    right:10px;
-    z-index:100;
-    font-size:16px;
-    padding:10px 15px;
-}
-
-#race{
-    background:#222;
-}
-
-#raceCanvas{
-    display:block;
-    margin:auto;
-    background:#555;
-}
-
-/* RACING */
-
-#raceMenu{
-    position:absolute;
-    inset:0;
-    z-index:20;
-    background:#111;
-    color:white;
-    text-align:center;
-    padding-top:12vh;
-}
-
-#raceMenu h1{
-    font-size:42px;
-    margin-bottom:30px;
-}
-
-.raceLevel{
-    width:250px;
-    display:block;
-    margin:12px auto;
-    color:white;
-}
-
-.easy{background:#388e3c}
-.medium{background:#f57c00}
-.hard{background:#d32f2f}
-
-#raceHUD{
-    position:absolute;
-    top:10px;
-    left:10px;
-    z-index:10;
-    color:white;
-    background:rgba(0,0,0,.5);
-    padding:10px;
-    border-radius:8px;
-    font-size:18px;
-}
-
-#racePause{
-    position:absolute;
-    top:10px;
-    right:100px;
-    z-index:10;
-    padding:8px 12px;
-    font-size:15px;
-}
-
-#crashScreen{
-    position:absolute;
-    inset:0;
-    z-index:30;
-    background:rgba(0,0,0,.75);
-    color:white;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    text-align:center;
-}
-
-#crashScreen h1{
-    font-size:60px;
-    color:#ff3333;
-}
-
-#crashScreen p{
-    font-size:24px;
-}
-
-/* GEOMETRY DASH */
-
-#geo{
-    background:#111;
-}
-
-#geoCanvas{
-    width:100%;
-    height:100%;
-    display:block;
-}
-
-#geoMenu{
-    position:absolute;
-    inset:0;
-    background:#191919;
-    color:white;
-    text-align:center;
-    padding-top:7vh;
-    z-index:30;
-    overflow:auto;
-}
-
-#geoMenu h1{
-    font-size:45px;
-    color:#00e5ff;
-}
-
-.levelGrid{
-    width:min(700px,95%);
-    margin:25px auto;
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:8px;
-}
-
-.levelButton{
-    margin:0;
-    padding:14px 5px;
-    font-size:18px;
-    background:#00bcd4;
-    color:white;
-}
-
-#geoHUD{
-    position:absolute;
-    top:10px;
-    left:10px;
-    color:white;
-    background:rgba(0,0,0,.45);
-    padding:8px;
-    border-radius:8px;
-    z-index:10;
-}
-
-#geoPause{
-    position:absolute;
-    top:10px;
-    right:100px;
-    z-index:10;
-    font-size:14px;
-    padding:8px;
-}
-
-/* MINECRAFT */
-
-#mine{
-    background:#87ceeb;
-}
-
-#mineCanvas{
-    position:absolute;
-    inset:0;
-}
-
-#mineHUD{
-    position:absolute;
-    top:10px;
-    left:10px;
-    z-index:20;
-    color:white;
-    background:rgba(0,0,0,.45);
-    padding:10px;
-    border-radius:8px;
-    line-height:1.5;
-}
-
-#mineCrosshair{
-    position:absolute;
-    left:50%;
-    top:50%;
-    width:25px;
-    height:25px;
-    transform:translate(-50%,-50%);
-    z-index:15;
-    pointer-events:none;
-}
-
-#mineCrosshair:before,
-#mineCrosshair:after{
-    content:"";
-    position:absolute;
-    background:white;
-    box-shadow:0 0 3px black;
-}
-
-#mineCrosshair:before{
-    width:2px;
-    height:25px;
-    left:12px;
-}
-
-#mineCrosshair:after{
-    width:25px;
-    height:2px;
-    top:12px;
-}
-
-.mineControls{
-    position:absolute;
-    inset:0;
-    z-index:25;
-    pointer-events:none;
-}
-
-.mineBtn{
-    position:absolute;
-    width:62px;
-    height:62px;
-    padding:0;
-    margin:0;
-    border-radius:15px;
-    background:rgba(0,0,0,.4);
-    color:white;
-    border:2px solid rgba(255,255,255,.6);
-    pointer-events:auto;
-    font-size:25px;
-}
-
-#mw{
-    left:78px;
-    bottom:140px;
-}
-
-#ms{
-    left:78px;
-    bottom:10px;
-}
-
-#ma{
-    left:8px;
-    bottom:75px;
-}
-
-#md{
-    left:148px;
-    bottom:75px;
-}
-
-#mj{
-    right:20px;
-    bottom:135px;
-}
-
-#mbreak{
-    right:95px;
-    bottom:55px;
-}
-
-#mplace{
-    right:20px;
-    bottom:55px;
-}
-
-#mineHint{
-    position:absolute;
-    right:10px;
-    top:70px;
-    color:white;
-    background:rgba(0,0,0,.4);
-    padding:8px;
-    border-radius:8px;
-    font-size:12px;
-}
-
-@media(min-width:800px){
-    .mineControls{
-        display:none;
-    }
-}
-
-@media(max-width:600px){
-    #home h1{
-        font-size:38px;
-    }
-
-    #home p{
-        font-size:16px;
-    }
-
-    .levelGrid{
-        grid-template-columns:repeat(5,1fr);
-    }
-
-    .levelButton{
-        font-size:14px;
-        padding:11px 2px;
-    }
+.info {
+    font-size: 20px;
+    margin: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- ================= HOME ================= -->
-
-<div id="home" class="screen active">
-
-    <h1>🎮 RITHIK GAMES</h1>
-    <p>Choose a game</p>
-
-    <button class="gameButton" id="raceButton">
-        🏎️ Racing Game
-    </button>
-
-    <button class="gameButton" id="geoButton">
-        🟦 Geometry Dash
-    </button>
-
-    <button class="gameButton" id="mineButton">
-        ⛏️ Minecraft
-    </button>
-
+<!-- HOME -->
+<div id="homeScreen" class="screen active">
+    <h1>rithik GAMES</h1>
+    <button onclick="showRacingMenu()">Racing Game</button>
+    <button onclick="showGeometryMenu()">Geometry Dash</button>
 </div>
 
 
-<!-- ================= RACING ================= -->
+<!-- RACING MENU -->
+<div id="racingMenu" class="screen">
+    <h1>RACING GAME</h1>
 
-<div id="race" class="screen">
+    <p>Select Difficulty</p>
 
-    <button class="homeBtn" id="raceHome">🏠 Home</button>
+    <button onclick="startRacing('easy')">Easy</button>
+    <button onclick="startRacing('medium')">Medium</button>
+    <button onclick="startRacing('hard')">Hard</button>
 
-    <div id="raceMenu">
+    <br>
 
-        <h1>🏎️ RITHIK RACING GAME</h1>
+    <button onclick="goHome()">Home</button>
+</div>
 
-        <button class="raceLevel easy" data-level="easy">
-            EASY
-        </button>
 
-        <button class="raceLevel medium" data-level="medium">
-            MEDIUM
-        </button>
+<!-- RACING GAME -->
+<div id="racingGameScreen" class="screen">
 
-        <button class="raceLevel hard" data-level="hard">
-            HARD
-        </button>
+    <h1>RACING GAME</h1>
 
-    </div>
-
-    <div id="raceHUD">
-        TIME: <span id="raceTime">0</span>s
+    <div class="info">
+        TIME: <span id="raceTime">0</span> seconds
         &nbsp;&nbsp;
         SCORE: <span id="raceScore">0</span>
     </div>
 
-    <button id="racePause">PAUSE</button>
-
     <canvas id="raceCanvas" width="600" height="700"></canvas>
 
-    <div id="crashScreen">
-
-        <h1>💥 CRASH!</h1>
-
-        <p>
-            Score: <span id="finalScore">0</span>
-        </p>
-
-        <button id="raceAgain">PLAY AGAIN</button>
-        <button id="raceMenuBtn">MENU</button>
-
-    </div>
-
+    <button onclick="pauseRace()">Pause</button>
+    <button onclick="goHome()">Home</button>
 </div>
 
 
-<!-- ================= GEOMETRY DASH ================= -->
+<!-- GEOMETRY MENU -->
+<div id="geometryMenu" class="screen">
 
-<div id="geo" class="screen">
+    <h1>GEOMETRY DASH</h1>
 
-    <button class="homeBtn" id="geoHome">🏠 Home</button>
+    <p>Select Level</p>
 
-    <div id="geoMenu">
+    <div id="levelButtons"></div>
 
-        <h1>🟦 RITHIK GEOMETRY DASH</h1>
+    <br>
 
-        <p style="margin-top:10px">
-            Choose a level
-        </p>
-
-        <div class="levelGrid" id="levelGrid"></div>
-
-    </div>
-
-    <div id="geoHUD">
-        LEVEL: <span id="geoLevel">1</span>
-    </div>
-
-    <button id="geoPause">PAUSE</button>
-
-    <canvas id="geoCanvas"></canvas>
-
+    <button onclick="goHome()">Home</button>
 </div>
 
 
-<!-- ================= MINECRAFT ================= -->
+<!-- GEOMETRY DASH -->
+<div id="geometryGameScreen" class="screen">
 
-<div id="mine" class="screen">
+    <h1>GEOMETRY DASH</h1>
 
-    <button class="homeBtn" id="mineHome">
-        🏠 Home
-    </button>
-
-    <canvas id="mineCanvas"></canvas>
-
-    <div id="mineCrosshair"></div>
-
-    <div id="mineHUD">
-        ⛏️ RITHIK MINECRAFT
-        <br>
-        Block:
-        <span id="selectedBlock">Grass</span>
-        <br>
-        1 Grass | 2 Dirt | 3 Stone | 4 Wood | 5 Leaves
+    <div class="info">
+        LEVEL: <span id="geoLevelText">1</span>
+        &nbsp;&nbsp;
+        TIME: <span id="geoTime">0</span> seconds
     </div>
 
-    <div id="mineHint">
-        PC: WASD + mouse<br>
-        Phone: buttons + drag
-    </div>
+    <canvas id="geoCanvas" width="1000" height="600"></canvas>
 
-    <div class="mineControls">
-
-        <button class="mineBtn" id="mw">▲</button>
-        <button class="mineBtn" id="ms">▼</button>
-        <button class="mineBtn" id="ma">◀</button>
-        <button class="mineBtn" id="md">▶</button>
-
-        <button class="mineBtn" id="mj">↑</button>
-
-        <button class="mineBtn" id="mbreak">⛏</button>
-        <button class="mineBtn" id="mplace">▣</button>
-
-    </div>
-
+    <button onclick="pauseGeometry()">Pause</button>
+    <button onclick="showGeometryMenu()">Levels</button>
+    <button onclick="goHome()">Home</button>
 </div>
 
-
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
 <script>
 
-/* =========================================================
-   GENERAL SCREEN SYSTEM
-========================================================= */
+/* =====================================================
+   SCREEN SYSTEM
+===================================================== */
 
-const screens = {
-    home: document.getElementById("home"),
-    race: document.getElementById("race"),
-    geo: document.getElementById("geo"),
-    mine: document.getElementById("mine")
-};
-
-function showScreen(name){
-
-    Object.values(screens).forEach(s =>
-        s.classList.remove("active")
-    );
-
-    screens[name].classList.add("active");
-
-    if(name !== "race"){
-        stopRace();
-    }
-
-    if(name !== "geo"){
-        stopGeometry();
-    }
-
-    if(name !== "mine"){
-        stopMinecraft();
-    }
+function hideAllScreens() {
+    document.querySelectorAll(".screen").forEach(function(screen) {
+        screen.classList.remove("active");
+    });
 }
 
-document.getElementById("raceButton")
-    .onclick = () => {
-        showScreen("race");
-        raceMenu.style.display = "block";
-    };
+function goHome() {
+    hideAllScreens();
+    document.getElementById("homeScreen").classList.add("active");
 
-document.getElementById("geoButton")
-    .onclick = () => {
-        showScreen("geo");
-        geoMenu.style.display = "block";
-    };
+    raceRunning = false;
+    geoRunning = false;
+}
 
-document.getElementById("mineButton")
-    .onclick = () => {
-        showScreen("mine");
-        startMinecraft();
-    };
+function showRacingMenu() {
+    hideAllScreens();
+    document.getElementById("racingMenu").classList.add("active");
 
-document.getElementById("raceHome")
-    .onclick = () => showScreen("home");
+    raceRunning = false;
+}
 
-document.getElementById("geoHome")
-    .onclick = () => showScreen("home");
+function showGeometryMenu() {
+    hideAllScreens();
+    document.getElementById("geometryMenu").classList.add("active");
 
-document.getElementById("mineHome")
-    .onclick = () => showScreen("home");
+    geoRunning = false;
+}
+
+function startGameScreen(id) {
+    hideAllScreens();
+    document.getElementById(id).classList.add("active");
+}
 
 
-/* =========================================================
+/* =====================================================
    RACING GAME
-========================================================= */
+===================================================== */
 
-const raceCanvas =
-    document.getElementById("raceCanvas");
-
-const rctx =
-    raceCanvas.getContext("2d");
-
-const raceMenu =
-    document.getElementById("raceMenu");
-
-const crashScreen =
-    document.getElementById("crashScreen");
+const raceCanvas = document.getElementById("raceCanvas");
+const raceCtx = raceCanvas.getContext("2d");
 
 let raceRunning = false;
 let racePaused = false;
-let raceLevel = "easy";
+let raceGameOver = false;
 
-let racePlayer;
-let raceEnemies = [];
+let raceDifficulty = "easy";
 
-let raceStartTime = 0;
-let raceLastTime = 0;
-let raceAnimation;
-
-let raceKeys = {};
-
-let raceSpawnTimer = 0;
-
-const raceSettings = {
-    easy:{
-        speed:220,
-        enemySpeed:150,
-        maxEnemies:2
-    },
-    medium:{
-        speed:260,
-        enemySpeed:190,
-        maxEnemies:3
-    },
-    hard:{
-        speed:300,
-        enemySpeed:250,
-        maxEnemies:4
-    }
+let playerCar = {
+    x: 275,
+    y: 580,
+    width: 50,
+    height: 90,
+    speed: 7
 };
 
-document.querySelectorAll(".raceLevel")
-.forEach(button => {
+let enemyCars = [];
 
-    button.onclick = () => {
+let raceStartTime = 0;
+let raceElapsed = 0;
 
-        raceLevel =
-            button.dataset.level;
+let lastEnemyTime = 0;
+let raceAnimation;
 
-        startRace();
 
-    };
+function startRacing(difficulty) {
 
-});
+    raceDifficulty = difficulty;
 
-document.getElementById("raceAgain")
-    .onclick = () => startRace();
-
-document.getElementById("raceMenuBtn")
-    .onclick = () => {
-
-        crashScreen.style.display = "none";
-        raceMenu.style.display = "block";
-
-    };
-
-document.getElementById("racePause")
-    .onclick = () => {
-
-        if(!raceRunning) return;
-
-        racePaused = !racePaused;
-
-        document.getElementById("racePause")
-            .textContent =
-            racePaused ? "RESUME" : "PAUSE";
-
-    };
-
-window.addEventListener("keydown", e => {
-
-    raceKeys[e.key.toLowerCase()] = true;
-
-});
-
-window.addEventListener("keyup", e => {
-
-    raceKeys[e.key.toLowerCase()] = false;
-
-});
-
-function startRace(){
-
-    raceMenu.style.display = "none";
-    crashScreen.style.display = "none";
+    startGameScreen("racingGameScreen");
 
     raceRunning = true;
     racePaused = false;
+    raceGameOver = false;
+
+    playerCar.x = 275;
+
+    enemyCars = [];
 
     raceStartTime = performance.now();
-    raceLastTime = performance.now();
+    raceElapsed = 0;
 
-    raceSpawnTimer = 0;
+    lastEnemyTime = performance.now();
 
-    raceEnemies = [];
+    document.getElementById("raceTime").textContent = "0";
+    document.getElementById("raceScore").textContent = "0";
 
-    racePlayer = {
-        x:300,
-        y:590,
-        width:48,
-        height:85
-    };
+    if (difficulty === "easy") {
+        playerCar.speed = 6;
+    }
 
-    document.getElementById("racePause")
-        .textContent = "PAUSE";
+    if (difficulty === "medium") {
+        playerCar.speed = 8;
+    }
+
+    if (difficulty === "hard") {
+        playerCar.speed = 10;
+    }
 
     cancelAnimationFrame(raceAnimation);
 
     raceLoop();
-
 }
 
-function stopRace(){
 
-    raceRunning = false;
+function drawRaceRoad() {
 
-    cancelAnimationFrame(raceAnimation);
+    raceCtx.fillStyle = "#168a35";
+    raceCtx.fillRect(0, 0, 600, 700);
 
+    raceCtx.fillStyle = "#333";
+    raceCtx.fillRect(100, 0, 400, 700);
+
+    raceCtx.fillStyle = "#fff";
+
+    raceCtx.fillRect(95, 0, 5, 700);
+    raceCtx.fillRect(500, 0, 5, 700);
+
+    let offset = (performance.now() / 5) % 100;
+
+    for (let y = -100; y < 700; y += 100) {
+        raceCtx.fillRect(295, y + offset, 10, 55);
+    }
 }
 
-function raceLoop(){
 
-    if(!raceRunning) return;
+function drawCar(car, color) {
 
-    raceAnimation =
-        requestAnimationFrame(raceLoop);
+    raceCtx.fillStyle = color;
 
-    let now = performance.now();
-
-    let delta =
-        Math.min((now-raceLastTime)/1000,.05);
-
-    raceLastTime = now;
-
-    if(racePaused){
-
-        drawRace();
-
-        return;
-
-    }
-
-    const settings =
-        raceSettings[raceLevel];
-
-    if(raceKeys["arrowleft"] ||
-       raceKeys["a"]){
-
-        racePlayer.x -=
-            settings.speed * delta;
-
-    }
-
-    if(raceKeys["arrowright"] ||
-       raceKeys["d"]){
-
-        racePlayer.x +=
-            settings.speed * delta;
-
-    }
-
-    racePlayer.x =
-        Math.max(
-            190,
-            Math.min(
-                362,
-                racePlayer.x
-            )
-        );
-
-    raceSpawnTimer -= delta;
-
-    if(
-        raceSpawnTimer <= 0 &&
-        raceEnemies.length <
-        settings.maxEnemies
-    ){
-
-        spawnRaceEnemy();
-
-        raceSpawnTimer =
-            0.7 + Math.random()*1.1;
-
-    }
-
-    for(let enemy of raceEnemies){
-
-        enemy.y +=
-            (settings.enemySpeed +
-            enemy.extraSpeed) * delta;
-
-    }
-
-    raceEnemies =
-        raceEnemies.filter(e =>
-            e.y < 800
-        );
-
-    for(let enemy of raceEnemies){
-
-        if(
-            racePlayer.x <
-                enemy.x + enemy.width &&
-            racePlayer.x +
-                racePlayer.width >
-                enemy.x &&
-            racePlayer.y <
-                enemy.y + enemy.height &&
-            racePlayer.y +
-                racePlayer.height >
-                enemy.y
-        ){
-
-            crashRace();
-
-            return;
-
-        }
-
-    }
-
-    let elapsed =
-        Math.floor(
-            (now-raceStartTime)/1000
-        );
-
-    document.getElementById("raceTime")
-        .textContent = elapsed;
-
-    document.getElementById("raceScore")
-        .textContent = elapsed;
-
-    drawRace();
-
-}
-
-function spawnRaceEnemy(){
-
-    const lanes = [205,276,347];
-
-    const x =
-        lanes[
-            Math.floor(
-                Math.random()*lanes.length
-            )
-        ];
-
-    const colors = [
-        "#2196f3",
-        "#ffeb3b",
-        "#9c27b0",
-        "#ff9800",
-        "#00bcd4",
-        "#ffffff"
-    ];
-
-    raceEnemies.push({
-
-        x:x,
-        y:-100,
-        width:48,
-        height:85,
-
-        color:
-            colors[
-                Math.floor(
-                    Math.random()*colors.length
-                )
-            ],
-
-        extraSpeed:
-            Math.random()*80
-
-    });
-
-}
-
-function drawRace(){
-
-    rctx.clearRect(
-        0,0,
-        raceCanvas.width,
-        raceCanvas.height
+    raceCtx.fillRect(
+        car.x,
+        car.y,
+        car.width,
+        car.height
     );
 
-    rctx.fillStyle="#3b3b3b";
+    raceCtx.fillStyle = "#111";
 
-    rctx.fillRect(
-        0,0,
-        600,700
-    );
-
-    /* road */
-
-    rctx.fillStyle="#222";
-
-    rctx.fillRect(
-        170,0,
-        260,700
-    );
-
-    /* road edges */
-
-    rctx.fillStyle="#ffffff";
-
-    rctx.fillRect(
-        170,0,
-        7,700
-    );
-
-    rctx.fillRect(
-        423,0,
-        7,700
-    );
-
-    /* lane markings */
-
-    let offset =
-        (performance.now()/5)%80;
-
-    rctx.strokeStyle="#eeeeee";
-    rctx.lineWidth=5;
-
-    for(let y=-80+offset;y<700;y+=80){
-
-        rctx.beginPath();
-
-        rctx.moveTo(256,y);
-        rctx.lineTo(256,y+40);
-
-        rctx.stroke();
-
-        rctx.beginPath();
-
-        rctx.moveTo(343,y);
-        rctx.lineTo(343,y+40);
-
-        rctx.stroke();
-
-    }
-
-    /* enemies */
-
-    for(let e of raceEnemies){
-
-        drawCar(
-            rctx,
-            e.x,
-            e.y,
-            e.width,
-            e.height,
-            e.color
-        );
-
-    }
-
-    /* player */
-
-    drawCar(
-        rctx,
-        racePlayer.x,
-        racePlayer.y,
-        racePlayer.width,
-        racePlayer.height,
-        "#e53935"
-    );
-
-}
-
-function drawCar(
-    ctx,
-    x,y,w,h,color
-){
-
-    ctx.fillStyle="#111";
-
-    ctx.fillRect(
-        x-5,
-        y+15,
-        8,
-        22
-    );
-
-    ctx.fillRect(
-        x+w-3,
-        y+15,
-        8,
-        22
-    );
-
-    ctx.fillRect(
-        x-5,
-        y+h-37,
-        8,
-        22
-    );
-
-    ctx.fillRect(
-        x+w-3,
-        y+h-37,
-        8,
-        22
-    );
-
-    ctx.fillStyle=color;
-
-    ctx.fillRect(
-        x,
-        y,
-        w,
-        h
-    );
-
-    ctx.fillStyle="#9ee7ff";
-
-    ctx.fillRect(
-        x+8,
-        y+10,
-        w-16,
+    raceCtx.fillRect(
+        car.x + 8,
+        car.y + 12,
+        car.width - 16,
         25
     );
 
-    ctx.fillStyle="#222";
+    raceCtx.fillStyle = "#222";
 
-    ctx.fillRect(
-        x+8,
-        y+h-30,
-        w-16,
-        20
+    raceCtx.fillRect(
+        car.x - 7,
+        car.y + 15,
+        7,
+        25
     );
 
-    ctx.fillStyle="#fff";
-
-    ctx.fillRect(
-        x+6,
-        y+3,
-        10,
-        6
+    raceCtx.fillRect(
+        car.x + car.width,
+        car.y + 15,
+        7,
+        25
     );
 
-    ctx.fillRect(
-        x+w-16,
-        y+3,
-        10,
-        6
+    raceCtx.fillRect(
+        car.x - 7,
+        car.y + 60,
+        7,
+        25
     );
 
+    raceCtx.fillRect(
+        car.x + car.width,
+        car.y + 60,
+        7,
+        25
+    );
 }
 
-function crashRace(){
+
+function createEnemy() {
+
+    let colors = [
+        "#3498db",
+        "#f1c40f",
+        "#9b59b6",
+        "#2ecc71",
+        "#e67e22",
+        "#ffffff"
+    ];
+
+    let speed = 4;
+
+    if (raceDifficulty === "easy") {
+        speed = 3 + Math.random() * 2;
+    }
+
+    if (raceDifficulty === "medium") {
+        speed = 4 + Math.random() * 3;
+    }
+
+    if (raceDifficulty === "hard") {
+        speed = 6 + Math.random() * 4;
+    }
+
+    enemyCars.push({
+        x: 120 + Math.random() * 330,
+        y: -100,
+        width: 50,
+        height: 90,
+        speed: speed,
+        color: colors[
+            Math.floor(Math.random() * colors.length)
+        ]
+    });
+}
+
+
+function rectanglesCollide(a, b) {
+
+    return (
+        a.x < b.x + b.width &&
+        a.x + a.width > b.x &&
+        a.y < b.y + b.height &&
+        a.y + a.height > b.y
+    );
+}
+
+
+function showRaceGameOver() {
 
     raceRunning = false;
+    raceGameOver = true;
 
-    const score =
-        document.getElementById("raceScore")
-            .textContent;
+    raceCtx.fillStyle = "rgba(0,0,0,0.8)";
+    raceCtx.fillRect(0, 0, 600, 700);
 
-    document.getElementById("finalScore")
-        .textContent = score;
+    raceCtx.fillStyle = "red";
+    raceCtx.font = "bold 55px Arial";
+    raceCtx.textAlign = "center";
 
-    crashScreen.style.display =
-        "flex";
+    raceCtx.fillText(
+        "CRASH!",
+        300,
+        280
+    );
 
+    raceCtx.fillStyle = "white";
+    raceCtx.font = "bold 28px Arial";
+
+    raceCtx.fillText(
+        "Score: " + Math.floor(raceElapsed),
+        300,
+        330
+    );
+
+    raceCtx.font = "22px Arial";
+
+    raceCtx.fillText(
+        "Press R to play again",
+        300,
+        390
+    );
+
+    raceCtx.fillText(
+        "Press M for menu",
+        300,
+        430
+    );
 }
 
 
-/* =========================================================
+function raceLoop() {
+
+    if (!raceRunning) {
+        return;
+    }
+
+    if (!racePaused) {
+
+        raceElapsed =
+            (performance.now() - raceStartTime) / 1000;
+
+        document.getElementById("raceTime").textContent =
+            Math.floor(raceElapsed);
+
+        document.getElementById("raceScore").textContent =
+            Math.floor(raceElapsed);
+
+        drawRaceRoad();
+
+
+        let enemyDelay = 1000;
+
+        if (raceDifficulty === "medium") {
+            enemyDelay = 800;
+        }
+
+        if (raceDifficulty === "hard") {
+            enemyDelay = 600;
+        }
+
+        if (
+            performance.now() - lastEnemyTime >
+            enemyDelay
+        ) {
+            createEnemy();
+            lastEnemyTime = performance.now();
+        }
+
+
+        for (let i = enemyCars.length - 1; i >= 0; i--) {
+
+            let enemy = enemyCars[i];
+
+            enemy.y += enemy.speed;
+
+            drawCar(enemy, enemy.color);
+
+            if (rectanglesCollide(playerCar, enemy)) {
+                showRaceGameOver();
+                return;
+            }
+
+            if (enemy.y > 750) {
+                enemyCars.splice(i, 1);
+            }
+        }
+
+        drawCar(playerCar, "#e74c3c");
+    }
+
+    raceAnimation =
+        requestAnimationFrame(raceLoop);
+}
+
+
+function pauseRace() {
+
+    if (!raceRunning) {
+        return;
+    }
+
+    racePaused = !racePaused;
+}
+
+
+/* Racing controls */
+
+document.addEventListener("keydown", function(event) {
+
+    if (
+        raceGameOver &&
+        event.key.toLowerCase() === "r"
+    ) {
+        startRacing(raceDifficulty);
+        return;
+    }
+
+    if (
+        raceGameOver &&
+        event.key.toLowerCase() === "m"
+    ) {
+        showRacingMenu();
+        return;
+    }
+
+    if (!raceRunning || racePaused) {
+        return;
+    }
+
+    if (
+        event.key === "ArrowLeft" ||
+        event.key.toLowerCase() === "a"
+    ) {
+
+        playerCar.x -= playerCar.speed;
+
+        if (playerCar.x < 105) {
+            playerCar.x = 105;
+        }
+    }
+
+    if (
+        event.key === "ArrowRight" ||
+        event.key.toLowerCase() === "d"
+    ) {
+
+        playerCar.x += playerCar.speed;
+
+        if (playerCar.x > 445) {
+            playerCar.x = 445;
+        }
+    }
+});
+
+
+/* =====================================================
    GEOMETRY DASH
-========================================================= */
+===================================================== */
 
 const geoCanvas =
     document.getElementById("geoCanvas");
 
-const gctx =
+const geoCtx =
     geoCanvas.getContext("2d");
-
-const geoMenu =
-    document.getElementById("geoMenu");
 
 let geoRunning = false;
 let geoPaused = false;
-let geoAnimation;
 
 let currentLevel = 1;
 
-let geoPlayer;
-let geoCamera = 0;
+let playerWorldX = 150;
+let playerY = 500;
 
-let geoLastTime = 0;
+let playerVelocityY = 0;
 
-let geoSpeed = 320;
+let playerOnGround = true;
+
+let cameraX = 0;
+
+let geoSpeed = 6;
+
+let geoStartTime = 0;
+let geoElapsed = 0;
+
+let geoAnimation;
 
 let geoObstacles = [];
 
-let geoGround = 500;
+let geoFinishX = 3000;
 
-function resizeGeo(){
 
-    geoCanvas.width =
-        window.innerWidth;
+/* Level data */
 
-    geoCanvas.height =
-        window.innerHeight;
+const levels = [
 
-    geoGround =
-        geoCanvas.height - 100;
+    {
+        speed: 5,
+        obstacles: [
+            [500,500,50,100],
+            [800,450,50,150],
+            [1100,500,50,100],
+            [1450,450,50,150],
+            [1800,500,50,100],
+            [2200,450,50,150]
+        ]
+    },
 
-}
+    {
+        speed: 5.5,
+        obstacles: [
+            [450,500,50,100],
+            [650,500,50,100],
+            [900,420,50,180],
+            [1200,500,50,100],
+            [1500,450,50,150],
+            [1800,400,50,200],
+            [2150,500,50,100],
+            [2500,450,50,150]
+        ]
+    },
 
-window.addEventListener(
-    "resize",
-    resizeGeo
-);
+    {
+        speed: 6,
+        obstacles: [
+            [500,500,50,100],
+            [700,450,50,150],
+            [950,400,50,200],
+            [1250,500,50,100],
+            [1450,400,50,200],
+            [1750,450,50,150],
+            [2050,350,50,250],
+            [2400,450,50,150]
+        ]
+    },
 
-resizeGeo();
+    {
+        speed: 6.5,
+        obstacles: [
+            [450,450,50,150],
+            [650,450,50,150],
+            [850,400,50,200],
+            [1100,350,50,250],
+            [1400,450,50,150],
+            [1600,400,50,200],
+            [1900,350,50,250],
+            [2250,400,50,200],
+            [2550,450,50,150]
+        ]
+    },
 
-for(let i=1;i<=10;i++){
+    {
+        speed: 7,
+        obstacles: [
+            [450,500,50,100],
+            [600,450,50,150],
+            [800,400,50,200],
+            [1050,500,50,100],
+            [1200,350,50,250],
+            [1500,400,50,200],
+            [1750,300,50,300],
+            [2050,400,50,200],
+            [2350,350,50,250],
+            [2700,400,50,200]
+        ]
+    },
 
-    const button =
+    {
+        speed: 7.5,
+        obstacles: [
+            [450,400,50,200],
+            [650,350,50,250],
+            [900,450,50,150],
+            [1100,300,50,300],
+            [1400,400,50,200],
+            [1650,350,50,250],
+            [1900,300,50,300],
+            [2200,400,50,200],
+            [2500,350,50,250],
+            [2850,400,50,200]
+        ]
+    },
+
+    {
+        speed: 8,
+        obstacles: [
+            [450,450,50,150],
+            [600,350,50,250],
+            [850,300,50,300],
+            [1100,400,50,200],
+            [1350,300,50,300],
+            [1600,350,50,250],
+            [1900,250,50,350],
+            [2200,350,50,250],
+            [2500,300,50,300],
+            [2850,350,50,250]
+        ]
+    },
+
+    {
+        speed: 8.5,
+        obstacles: [
+            [450,400,50,200],
+            [600,300,50,300],
+            [850,350,50,250],
+            [1050,250,50,350],
+            [1350,350,50,250],
+            [1550,300,50,300],
+            [1800,250,50,350],
+            [2100,350,50,250],
+            [2350,300,50,300],
+            [2650,250,50,350],
+            [3000,350,50,250]
+        ]
+    },
+
+    {
+        speed: 9,
+        obstacles: [
+            [450,350,50,250],
+            [650,250,50,350],
+            [900,300,50,300],
+            [1150,200,50,400],
+            [1450,300,50,300],
+            [1700,250,50,350],
+            [2000,200,50,400],
+            [2300,300,50,300],
+            [2600,250,50,350],
+            [2900,200,50,400]
+        ]
+    },
+
+    {
+        speed: 10,
+        obstacles: [
+            [450,300,50,300],
+            [650,200,50,400],
+            [900,250,50,350],
+            [1150,150,50,450],
+            [1450,250,50,350],
+            [1700,200,50,400],
+            [2000,150,50,450],
+            [2300,250,50,350],
+            [2600,200,50,400],
+            [2900,150,50,450],
+            [3250,250,50,350]
+        ]
+    }
+];
+
+
+/* Level buttons */
+
+const levelButtons =
+    document.getElementById("levelButtons");
+
+for (let i = 1; i <= 10; i++) {
+
+    let button =
         document.createElement("button");
 
-    button.className =
-        "levelButton";
-
     button.textContent =
-        "LEVEL "+i;
+        "Level " + i;
 
-    button.onclick = () =>
+    button.onclick = function() {
         startGeometry(i);
-
-    document.getElementById("levelGrid")
-        .appendChild(button);
-
-}
-
-document.getElementById("geoPause")
-    .onclick = () => {
-
-        geoPaused = !geoPaused;
-
-        document.getElementById("geoPause")
-            .textContent =
-            geoPaused ? "RESUME" : "PAUSE";
-
     };
 
-function startGeometry(level){
+    levelButtons.appendChild(button);
+}
+
+
+/* Start Geometry Dash */
+
+function startGeometry(level) {
 
     currentLevel = level;
 
-    geoMenu.style.display = "none";
+    startGameScreen("geometryGameScreen");
 
     geoRunning = true;
     geoPaused = false;
 
+    playerWorldX = 150;
+    playerY = 500;
+
+    playerVelocityY = 0;
+    playerOnGround = true;
+
+    /*
+       CAMERA STARTS AT ZERO.
+       The character will visibly move.
+    */
+
+    cameraX = 0;
+
     geoSpeed =
-        280 + level*18;
+        levels[level - 1].speed;
 
-    geoPlayer = {
+    geoObstacles =
+        levels[level - 1].obstacles;
 
-        worldX:150,
-        y:0,
-        size:42,
-        velocityY:0,
-        grounded:true
+    geoFinishX =
+        geoObstacles[
+            geoObstacles.length - 1
+        ][0] + 350;
 
-    };
-
-    geoCamera = 0;
-
-    createGeoObstacles(level);
-
-    document.getElementById("geoLevel")
-        .textContent = level;
-
-    geoLastTime =
+    geoStartTime =
         performance.now();
 
-    cancelAnimationFrame(
-        geoAnimation
-    );
+    geoElapsed = 0;
+
+    document.getElementById(
+        "geoLevelText"
+    ).textContent = level;
+
+    document.getElementById(
+        "geoTime"
+    ).textContent = "0";
+
+    cancelAnimationFrame(geoAnimation);
 
     geometryLoop();
-
 }
 
-function stopGeometry(){
 
-    geoRunning = false;
+/* Draw background */
 
-    cancelAnimationFrame(
-        geoAnimation
+function drawGeometryBackground() {
+
+    geoCtx.fillStyle = "#07152b";
+
+    geoCtx.fillRect(
+        0,
+        0,
+        1000,
+        600
     );
 
+    /*
+       Background grid
+    */
+
+    geoCtx.fillStyle = "#10294d";
+
+    for (
+        let x = -100 - (cameraX % 100);
+        x < 1100;
+        x += 100
+    ) {
+
+        for (
+            let y = 50;
+            y < 450;
+            y += 100
+        ) {
+
+            geoCtx.fillRect(
+                x,
+                y,
+                60,
+                60
+            );
+        }
+    }
+
+    /*
+       Ground
+    */
+
+    geoCtx.fillStyle = "#222";
+
+    geoCtx.fillRect(
+        0,
+        550,
+        1000,
+        50
+    );
+
+    geoCtx.fillStyle = "#00ff88";
+
+    geoCtx.fillRect(
+        0,
+        550,
+        1000,
+        8
+    );
 }
 
-function createGeoObstacles(level){
 
-    geoObstacles = [];
+/* Draw obstacles */
 
-    let x = 650;
+function drawGeometryObstacles() {
 
-    const count =
-        15 + level*4;
+    for (let obstacle of geoObstacles) {
 
-    for(let i=0;i<count;i++){
+        let x =
+            obstacle[0] - cameraX;
 
-        x +=
-            300 +
-            Math.random()*220 -
-            level*5;
+        let y =
+            obstacle[1];
 
-        const type =
-            Math.random() < .65
-            ? "spike"
-            : "block";
+        let width =
+            obstacle[2];
 
-        geoObstacles.push({
+        let height =
+            obstacle[3];
 
-            x:x,
-            type:type,
-            width:
-                type==="spike"
-                ? 45
-                : 55,
-            height:
-                type==="spike"
-                ? 55
-                : 70
+        if (
+            x > -100 &&
+            x < 1100
+        ) {
 
-        });
+            geoCtx.fillStyle = "#e74c3c";
 
+            geoCtx.fillRect(
+                x,
+                y,
+                width,
+                height
+            );
+
+            geoCtx.fillStyle = "#ff7675";
+
+            geoCtx.fillRect(
+                x,
+                y,
+                width,
+                8
+            );
+
+            geoCtx.strokeStyle = "white";
+
+            geoCtx.lineWidth = 2;
+
+            geoCtx.strokeRect(
+                x,
+                y,
+                width,
+                height
+            );
+        }
     }
 }
 
-function geometryLoop(){
 
-    if(!geoRunning) return;
+/* Finish line */
+
+function drawFinishLine() {
+
+    let x =
+        geoFinishX - cameraX;
+
+    if (
+        x > -100 &&
+        x < 1100
+    ) {
+
+        geoCtx.fillStyle = "white";
+
+        geoCtx.fillRect(
+            x,
+            100,
+            8,
+            450
+        );
+
+        geoCtx.fillStyle = "yellow";
+
+        geoCtx.font =
+            "bold 25px Arial";
+
+        geoCtx.fillText(
+            "FINISH",
+            x - 35,
+            90
+        );
+    }
+}
+
+
+/* Draw player */
+
+function drawGeometryPlayer() {
+
+    let screenX =
+        playerWorldX - cameraX;
+
+    let size = 50;
+
+    geoCtx.save();
+
+    geoCtx.translate(
+        screenX + 25,
+        playerY + 25
+    );
+
+    /*
+       Rotate while jumping.
+    */
+
+    if (!playerOnGround) {
+        geoCtx.rotate(
+            playerWorldX * 0.08
+        );
+    }
+
+    /*
+       Character body
+    */
+
+    geoCtx.fillStyle = "#00ff88";
+
+    geoCtx.fillRect(
+        -25,
+        -25,
+        50,
+        50
+    );
+
+    geoCtx.strokeStyle = "white";
+
+    geoCtx.lineWidth = 3;
+
+    geoCtx.strokeRect(
+        -25,
+        -25,
+        50,
+        50
+    );
+
+    /*
+       Eyes
+    */
+
+    geoCtx.fillStyle = "#111";
+
+    geoCtx.fillRect(
+        -15,
+        -10,
+        10,
+        10
+    );
+
+    geoCtx.fillRect(
+        5,
+        -10,
+        10,
+        10
+    );
+
+    /*
+       Mouth
+    */
+
+    geoCtx.fillRect(
+        -12,
+        10,
+        24,
+        5
+    );
+
+    geoCtx.restore();
+
+    /*
+       Movement trail
+    */
+
+    geoCtx.fillStyle =
+        "rgba(0,255,136,0.25)";
+
+    geoCtx.fillRect(
+        screenX - 35,
+        playerY + 15,
+        25,
+        20
+    );
+}
+
+
+/* Jump */
+
+function geometryJump() {
+
+    if (
+        geoRunning &&
+        !geoPaused &&
+        playerOnGround
+    ) {
+
+        playerVelocityY = -15;
+
+        playerOnGround = false;
+    }
+}
+
+
+/* Keyboard */
+
+document.addEventListener("keydown", function(event) {
+
+    if (
+        event.code === "Space" ||
+        event.key === "ArrowUp" ||
+        event.key.toLowerCase() === "w"
+    ) {
+
+        if (
+            geoRunning &&
+            !geoPaused
+        ) {
+
+            event.preventDefault();
+
+            geometryJump();
+        }
+    }
+});
+
+
+/* Mouse */
+
+geoCanvas.addEventListener(
+    "mousedown",
+    function() {
+
+        geometryJump();
+    }
+);
+
+
+/* =====================================================
+   GEOMETRY COLLISION
+===================================================== */
+
+function geometryCollision() {
+
+    let size = 50;
+
+    let playerLeft =
+        playerWorldX;
+
+    let playerRight =
+        playerWorldX + size;
+
+    let playerTop =
+        playerY;
+
+    let playerBottom =
+        playerY + size;
+
+
+    for (let obstacle of geoObstacles) {
+
+        let left =
+            obstacle[0];
+
+        let top =
+            obstacle[1];
+
+        let right =
+            obstacle[0] + obstacle[2];
+
+        let bottom =
+            obstacle[1] + obstacle[3];
+
+
+        if (
+            playerRight > left &&
+            playerLeft < right &&
+            playerBottom > top &&
+            playerTop < bottom
+        ) {
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+/* =====================================================
+   GEOMETRY LOOP
+===================================================== */
+
+function geometryLoop() {
+
+    if (!geoRunning) {
+        return;
+    }
+
+    if (!geoPaused) {
+
+        /*
+           TIME
+        */
+
+        geoElapsed =
+            (performance.now() -
+             geoStartTime) / 1000;
+
+        document.getElementById(
+            "geoTime"
+        ).textContent =
+            Math.floor(geoElapsed);
+
+
+        /*
+           ================================================
+           CHARACTER MOVES FORWARD
+           ================================================
+        */
+
+        playerWorldX += geoSpeed;
+
+
+        /*
+           Gravity
+        */
+
+        playerVelocityY += 0.7;
+
+        playerY += playerVelocityY;
+
+
+        /*
+           Ground
+        */
+
+        if (playerY >= 500) {
+
+            playerY = 500;
+
+            playerVelocityY = 0;
+
+            playerOnGround = true;
+        }
+
+
+        /*
+           ================================================
+           CAMERA
+           ================================================
+
+           Character starts at screen X = 150.
+
+           It moves:
+
+           150
+           200
+           300
+           400
+           500
+           600
+           650
+
+           ONLY THEN does the camera start moving.
+        */
+
+        let screenX =
+            playerWorldX - cameraX;
+
+        const RIGHT_ZONE = 650;
+
+        const LEFT_ZONE = 180;
+
+
+        if (screenX > RIGHT_ZONE) {
+
+            cameraX =
+                playerWorldX -
+                RIGHT_ZONE;
+        }
+
+
+        if (screenX < LEFT_ZONE) {
+
+            cameraX =
+                Math.max(
+                    0,
+                    playerWorldX -
+                    LEFT_ZONE
+                );
+        }
+
+
+        /*
+           Draw
+        */
+
+        drawGeometryBackground();
+
+        drawGeometryObstacles();
+
+        drawFinishLine();
+
+        drawGeometryPlayer();
+
+
+        /*
+           ================================================
+           NO GAME OVER
+           ================================================
+
+           If the character hits an obstacle,
+           the level simply restarts.
+
+           There is NO "GAME OVER" screen.
+        */
+
+        if (geometryCollision()) {
+
+            startGeometry(currentLevel);
+
+            return;
+        }
+
+
+        /*
+           Finish
+        */
+
+        if (
+            playerWorldX >=
+            geoFinishX
+        ) {
+
+            /*
+               Automatically go to next level.
+            */
+
+            if (currentLevel < 10) {
+
+                startGeometry(
+                    currentLevel + 1
+                );
+
+            } else {
+
+                /*
+                   After level 10, return to
+                   the level menu.
+                */
+
+                showGeometryMenu();
+            }
+
+            return;
+        }
+    }
 
     geoAnimation =
         requestAnimationFrame(
             geometryLoop
         );
+}
 
-    let now =
-        performance.now();
 
-    let delta =
-        Math.min(
-            (now-geoLastTime)/1000,
-            .04
-        );
+/* Pause */
 
-    geoLastTime = now;
+function pauseGeometry() {
 
-    if(geoPaused){
-
-        drawGeometry();
-
+    if (!geoRunning) {
         return;
-
     }
 
-    geoPlayer.worldX +=
-        geoSpeed * delta;
-
-    geoPlayer.velocityY +=
-        1800 * delta;
-
-    geoPlayer.y +=
-        geoPlayer.velocityY * delta;
-
-    if(
-        geoPlayer.y >= 0
-    ){
-
-        geoPlayer.y = 0;
-
-        geoPlayer.velocityY = 0;
-
-        geoPlayer.grounded = true;
-
-    }
-
-    if(
-        geoPlayer.worldX >
-        geoCamera + 650
-    ){
-
-        geoCamera =
-            geoPlayer.worldX - 650;
-
-    }
-
-    if(checkGeoCollision()){
-
-        /* NO GAME OVER.
-           Restart current level. */
-
-        startGeometry(
-            currentLevel
-        );
-
-        return;
-
-    }
-
-    const last =
-        geoObstacles[
-            geoObstacles.length-1
-        ];
-
-    if(
-        last &&
-        geoPlayer.worldX >
-        last.x + 500
-    ){
-
-        if(currentLevel < 10){
-
-            startGeometry(
-                currentLevel+1
-            );
-
-        }
-        else{
-
-            geoMenu.style.display =
-                "block";
-
-            geoRunning = false;
-
-        }
-
-        return;
-
-    }
-
-    drawGeometry();
-
+    geoPaused =
+        !geoPaused;
 }
-
-function jumpGeometry(){
-
-    if(
-        geoRunning &&
-        !geoPaused &&
-        geoPlayer.grounded
-    ){
-
-        geoPlayer.velocityY =
-            -720;
-
-        geoPlayer.grounded =
-            false;
-
-    }
-
-}
-
-geoCanvas.addEventListener(
-    "pointerdown",
-    jumpGeometry
-);
-
-window.addEventListener(
-    "keydown",
-    e => {
-
-        if(
-            e.code==="Space" ||
-            e.code==="ArrowUp" ||
-            e.code==="KeyW"
-        ){
-
-            if(
-                screens.geo.classList.contains(
-                    "active"
-                )
-            ){
-
-                jumpGeometry();
-
-            }
-
-        }
-
-    }
-);
-
-function checkGeoCollision(){
-
-    const px =
-        geoPlayer.worldX;
-
-    const py =
-        geoGround -
-        geoPlayer.size -
-        geoPlayer.y;
-
-    for(let o of geoObstacles){
-
-        const ox =
-            o.x - geoCamera;
-
-        const screenPlayerX =
-            geoPlayer.worldX -
-            geoCamera;
-
-        if(
-            screenPlayerX + geoPlayer.size - 7 >
-                ox &&
-            screenPlayerX + 7 <
-                ox + o.width
-        ){
-
-            if(
-                o.type==="spike"
-            ){
-
-                const spikeTop =
-                    geoGround -
-                    o.height;
-
-                if(
-                    py + geoPlayer.size >
-                        spikeTop + 15
-                ){
-
-                    return true;
-
-                }
-
-            }
-            else{
-
-                const blockTop =
-                    geoGround -
-                    o.height;
-
-                if(
-                    py + geoPlayer.size >
-                        blockTop
-                ){
-
-                    return true;
-
-                }
-
-            }
-
-        }
-
-    }
-
-    return false;
-
-}
-
-function drawGeometry(){
-
-    gctx.clearRect(
-        0,0,
-        geoCanvas.width,
-        geoCanvas.height
-    );
-
-    /* sky */
-
-    gctx.fillStyle="#45b8e8";
-
-    gctx.fillRect(
-        0,0,
-        geoCanvas.width,
-        geoCanvas.height
-    );
-
-    /* background */
-
-    gctx.fillStyle="#6ed0ef";
-
-    for(
-        let x=
-            -((geoCamera*.2)%100);
-        x<geoCanvas.width;
-        x+=100
-    ){
-
-        gctx.fillRect(
-            x,
-            150,
-            50,
-            80
-        );
-
-    }
-
-    /* ground */
-
-    gctx.fillStyle="#222";
-
-    gctx.fillRect(
-        0,
-        geoGround,
-        geoCanvas.width,
-        geoCanvas.height -
-        geoGround
-    );
-
-    gctx.fillStyle="#00e5ff";
-
-    gctx.fillRect(
-        0,
-        geoGround,
-        geoCanvas.width,
-        8
-    );
-
-    /* obstacles */
-
-    for(let o of geoObstacles){
-
-        const x =
-            o.x - geoCamera;
-
-        if(
-            x < -100 ||
-            x > geoCanvas.width+100
-        ) continue;
-
-        if(
-            o.type==="spike"
-        ){
-
-            gctx.fillStyle="#ff1744";
-
-            gctx.beginPath();
-
-            gctx.moveTo(
-                x,
-                geoGround
-            );
-
-            gctx.lineTo(
-                x+o.width/2,
-                geoGround-o.height
-            );
-
-            gctx.lineTo(
-                x+o.width,
-                geoGround
-            );
-
-            gctx.closePath();
-
-            gctx.fill();
-
-        }
-        else{
-
-            gctx.fillStyle="#9c27b0";
-
-            gctx.fillRect(
-                x,
-                geoGround-o.height,
-                o.width,
-                o.height
-            );
-
-        }
-
-    }
-
-    /* player */
-
-    const playerX =
-        geoPlayer.worldX -
-        geoCamera;
-
-    const playerY =
-        geoGround -
-        geoPlayer.size -
-        geoPlayer.y;
-
-    gctx.save();
-
-    gctx.translate(
-        playerX+
-        geoPlayer.size/2,
-        playerY+
-        geoPlayer.size/2
-    );
-
-    gctx.rotate(
-        geoPlayer.worldX/100
-    );
-
-    gctx.fillStyle="#00e676";
-
-    gctx.fillRect(
-        -geoPlayer.size/2,
-        -geoPlayer.size/2,
-        geoPlayer.size,
-        geoPlayer.size
-    );
-
-    gctx.fillStyle="#111";
-
-    gctx.fillRect(
-        -12,
-        -10,
-        7,
-        7
-    );
-
-    gctx.fillRect(
-        5,
-        -10,
-        7,
-        7
-    );
-
-    gctx.restore();
-
-}
-
-
-/* =========================================================
-   MINECRAFT
-========================================================= */
-
-const mineCanvas =
-    document.getElementById("mineCanvas");
-
-const mctx =
-    mineCanvas.getContext("2d");
-
-let mineRunning = false;
-
-let mineScene;
-let mineCamera;
-let mineRenderer;
-
-let minePlayer;
-
-let mineWorld = [];
-
-let mineKeys = {};
-
-let mineYaw = 0;
-let minePitch = 0;
-
-let mineVelocityY = 0;
-let mineCanJump = false;
-
-let mineTouchLooking = false;
-let mineLastX = 0;
-let mineLastY = 0;
-
-let mineSelected = 1;
-
-const mineBlockNames = {
-    1:"Grass",
-    2:"Dirt",
-    3:"Stone",
-    4:"Wood",
-    5:"Leaves"
-};
-
-const mineColors = {
-    1:0x55aa44,
-    2:0x8b5a2b,
-    3:0x888888,
-    4:0x9b6b35,
-    5:0x238b45
-};
-
-let mineMaterials = {};
-
-for(let id in mineColors){
-
-    mineMaterials[id] =
-        new THREE.MeshLambertMaterial({
-            color:mineColors[id]
-        });
-
-}
-
-function startMinecraft(){
-
-    if(mineRunning) return;
-
-    mineRunning = true;
-
-    if(!mineScene){
-
-        createMinecraft();
-
-    }
-
-}
-
-function stopMinecraft(){
-
-    mineRunning = false;
-
-}
-
-function createMinecraft(){
-
-    mineScene =
-        new THREE.Scene();
-
-    mineScene.background =
-        new THREE.Color(0x87ceeb);
-
-    mineScene.fog =
-        new THREE.Fog(
-            0x87ceeb,
-            25,
-            65
-        );
-
-    mineCamera =
-        new THREE.PerspectiveCamera(
-            75,
-            window.innerWidth/
-            window.innerHeight,
-            .1,
-            200
-        );
-
-    mineRenderer =
-        new THREE.WebGLRenderer({
-            antialias:false
-        });
-
-    mineRenderer.setPixelRatio(
-        Math.min(
-            window.devicePixelRatio,
-            2
-        )
-    );
-
-    mineRenderer.setSize(
-        window.innerWidth,
-        window.innerHeight
-    );
-
-    mineCanvas.replaceWith(
-        mineRenderer.domElement
-    );
-
-    mineCanvas =
-        mineRenderer.domElement;
-
-    mineCanvas.id =
-        "mineCanvas";
-
-    const light =
-        new THREE.HemisphereLight(
-            0xffffff,
-            0x557755,
-            1.5
-        );
-
-    mineScene.add(light);
-
-    const sun =
-        new THREE.DirectionalLight(
-            0xffffff,
-            1.2
-        );
-
-    sun.position.set(
-        20,40,10
-    );
-
-    mineScene.add(sun);
-
-    createMineWorld();
-
-    minePlayer =
-        new THREE.Object3D();
-
-    minePlayer.position.set(
-        0,
-        getMineGround(0,0)+1.0,
-        0
-    );
-
-    mineScene.add(
-        minePlayer
-    );
-
-    minePlayer.add(
-        mineCamera
-    );
-
-    mineCamera.position.set(
-        0,.6,0
-    );
-
-    setupMineControls();
-
-    window.addEventListener(
-        "resize",
-        resizeMinecraft
-    );
-
-    mineLoop();
-
-}
-
-function createMineWorld(){
-
-    const size = 32;
-    const half = 16;
-
-    for(
-        let x=-half;
-        x<=half;
-        x++
-    ){
-
-        for(
-            let z=-half;
-            z<=half;
-            z++
-        ){
-
-            let h =
-                2 +
-                Math.floor(
-                    Math.sin(x*.5)+
-                    Math.cos(z*.45)+
-                    Math.sin((x+z)*.25)
-                );
-
-            h =
-                Math.max(
-                    1,
-                    Math.min(5,h)
-                );
-
-            for(
-                let y=0;
-                y<=h;
-                y++
-            ){
-
-                let type;
-
-                if(y===h)
-                    type=1;
-                else if(y>=h-2)
-                    type=2;
-                else
-                    type=3;
-
-                addMineBlock(
-                    x,y,z,type
-                );
-
-            }
-
-            if(
-                Math.random()<.045 &&
-                Math.abs(x)>2 &&
-                Math.abs(z)>2
-            ){
-
-                createMineTree(
-                    x,h+1,z
-                );
-
-            }
-
-        }
-
-    }
-
-}
-
-function addMineBlock(
-    x,y,z,type
-){
-
-    const mesh =
-        new THREE.Mesh(
-            new THREE.BoxGeometry(
-                1,1,1
-            ),
-            mineMaterials[type]
-        );
-
-    mesh.position.set(
-        x,y,z
-    );
-
-    mesh.userData.block = true;
-    mesh.userData.type = type;
-
-    mineScene.add(mesh);
-
-    mineWorld.push(mesh);
-
-    return mesh;
-
-}
-
-function createMineTree(
-    x,y,z
-){
-
-    for(
-        let i=0;
-        i<4;
-        i++
-    ){
-
-        addMineBlock(
-            x,
-            y+i,
-            z,
-            4
-        );
-
-    }
-
-    for(
-        let dx=-2;
-        dx<=2;
-        dx++
-    ){
-
-        for(
-            let dz=-2;
-            dz<=2;
-            dz++
-        ){
-
-            for(
-                let dy=2;
-                dy<=4;
-                dy++
-            ){
-
-                if(
-                    Math.abs(dx)+
-                    Math.abs(dz)<=3
-                ){
-
-                    addMineBlock(
-                        x+dx,
-                        y+dy,
-                        z+dz,
-                        5
-                    );
-
-                }
-
-            }
-
-        }
-
-    }
-
-}
-
-function getMineGround(
-    x,z
-){
-
-    let highest=-1;
-
-    for(
-        let block of mineWorld
-    ){
-
-        if(
-            Math.abs(
-                block.position.x-x
-            )<.5 &&
-            Math.abs(
-                block.position.z-z
-            )<.5
-        ){
-
-            highest =
-                Math.max(
-                    highest,
-                    block.position.y+.5
-                );
-
-        }
-
-    }
-
-    return highest;
-
-}
-
-function setupMineControls(){
-
-    window.addEventListener(
-        "keydown",
-        e => {
-
-            mineKeys[e.code]=true;
-
-            if(
-                e.code==="Space" ||
-                e.code==="ArrowUp"
-            ){
-
-                mineJump();
-
-            }
-
-            if(
-                e.code==="Digit1"
-            ) mineSelect(1);
-
-            if(
-                e.code==="Digit2"
-            ) mineSelect(2);
-
-            if(
-                e.code==="Digit3"
-            ) mineSelect(3);
-
-            if(
-                e.code==="Digit4"
-            ) mineSelect(4);
-
-            if(
-                e.code==="Digit5"
-            ) mineSelect(5);
-
-        }
-    );
-
-    window.addEventListener(
-        "keyup",
-        e => {
-            mineKeys[e.code]=false;
-        }
-    );
-
-    mineCanvas.addEventListener(
-        "click",
-        () => {
-
-            if(
-                window.innerWidth>=800
-            ){
-
-                mineCanvas.requestPointerLock();
-
-            }
-
-        }
-    );
-
-    document.addEventListener(
-        "mousemove",
-        e => {
-
-            if(
-                document.pointerLockElement===
-                mineCanvas &&
-                mineRunning
-            ){
-
-                mineYaw -=
-                    e.movementX*.002;
-
-                minePitch -=
-                    e.movementY*.002;
-
-                minePitch =
-                    Math.max(
-                        -1.45,
-                        Math.min(
-                            1.45,
-                            minePitch
-                        )
-                    );
-
-            }
-
-        }
-    );
-
-    document.addEventListener(
-        "mousedown",
-        e => {
-
-            if(!mineRunning) return;
-
-            if(
-                e.button===0
-            ){
-
-                breakMineBlock();
-
-            }
-
-            if(
-                e.button===2
-            ){
-
-                placeMineBlock();
-
-            }
-
-        }
-    );
-
-    document.addEventListener(
-        "contextmenu",
-        e => {
-
-            if(mineRunning)
-                e.preventDefault();
-
-        }
-    );
-
-    setupMobileMineButton(
-        "mw","KeyW"
-    );
-
-    setupMobileMineButton(
-        "ms","KeyS"
-    );
-
-    setupMobileMineButton(
-        "ma","KeyA"
-    );
-
-    setupMobileMineButton(
-        "md","KeyD"
-    );
-
-    document.getElementById("mj")
-        .addEventListener(
-            "touchstart",
-            e => {
-
-                e.preventDefault();
-
-                mineJump();
-
-            },
-            {passive:false}
-        );
-
-    document.getElementById("mbreak")
-        .addEventListener(
-            "touchstart",
-            e => {
-
-                e.preventDefault();
-
-                breakMineBlock();
-
-            },
-            {passive:false}
-        );
-
-    document.getElementById("mplace")
-        .addEventListener(
-            "touchstart",
-            e => {
-
-                e.preventDefault();
-
-                placeMineBlock();
-
-            },
-            {passive:false}
-        );
-
-    mineCanvas.addEventListener(
-        "touchstart",
-        e => {
-
-            if(e.touches.length!==1)
-                return;
-
-            mineTouchLooking=true;
-
-            mineLastX =
-                e.touches[0].clientX;
-
-            mineLastY =
-                e.touches[0].clientY;
-
-        },
-        {passive:false}
-    );
-
-    mineCanvas.addEventListener(
-        "touchmove",
-        e => {
-
-            if(!mineTouchLooking)
-                return;
-
-            if(e.touches.length!==1)
-                return;
-
-            e.preventDefault();
-
-            const x =
-                e.touches[0].clientX;
-
-            const y =
-                e.touches[0].clientY;
-
-            const dx =
-                x-mineLastX;
-
-            const dy =
-                y-mineLastY;
-
-            mineYaw -= dx*.006;
-
-            minePitch -= dy*.006;
-
-            minePitch =
-                Math.max(
-                    -1.45,
-                    Math.min(
-                        1.45,
-                        minePitch
-                    )
-                );
-
-            mineLastX=x;
-            mineLastY=y;
-
-        },
-        {passive:false}
-    );
-
-    mineCanvas.addEventListener(
-        "touchend",
-        () => {
-            mineTouchLooking=false;
-        }
-    );
-
-}
-
-function setupMobileMineButton(
-    id,key
-){
-
-    const button =
-        document.getElementById(id);
-
-    button.addEventListener(
-        "touchstart",
-        e => {
-
-            e.preventDefault();
-
-            mineKeys[key]=true;
-
-        },
-        {passive:false}
-    );
-
-    button.addEventListener(
-        "touchend",
-        e => {
-
-            e.preventDefault();
-
-            mineKeys[key]=false;
-
-        },
-        {passive:false}
-    );
-
-    button.addEventListener(
-        "touchcancel",
-        () => {
-
-            mineKeys[key]=false;
-
-        }
-    );
-
-}
-
-function mineSelect(type){
-
-    mineSelected=type;
-
-    document.getElementById(
-        "selectedBlock"
-    ).textContent =
-        mineBlockNames[type];
-
-}
-
-function mineJump(){
-
-    if(
-        mineRunning &&
-        mineCanJump
-    ){
-
-        mineVelocityY=8.5;
-
-        mineCanJump=false;
-
-    }
-
-}
-
-function updateMinecraft(
-    delta
-){
-
-    const speed=5.5;
-
-    let forward=0;
-    let side=0;
-
-    if(
-        mineKeys["KeyW"] ||
-        mineKeys["ArrowUp"]
-    ) forward++;
-
-    if(
-        mineKeys["KeyS"] ||
-        mineKeys["ArrowDown"]
-    ) forward--;
-
-    if(
-        mineKeys["KeyA"] ||
-        mineKeys["ArrowLeft"]
-    ) side--;
-
-    if(
-        mineKeys["KeyD"] ||
-        mineKeys["ArrowRight"]
-    ) side++;
-
-    const direction =
-        new THREE.Vector3();
-
-    if(
-        forward!==0 ||
-        side!==0
-    ){
-
-        direction.set(
-            side,
-            0,
-            -forward
-        );
-
-        direction.normalize();
-
-        direction.applyAxisAngle(
-            new THREE.Vector3(0,1,0),
-            mineYaw
-        );
-
-        const nx =
-            minePlayer.position.x+
-            direction.x*
-            speed*delta;
-
-        const nz =
-            minePlayer.position.z+
-            direction.z*
-            speed*delta;
-
-        if(
-            !mineCollides(
-                nx,
-                minePlayer.position.y,
-                minePlayer.position.z
-            )
-        ){
-
-            minePlayer.position.x=nx;
-
-        }
-
-        if(
-            !mineCollides(
-                minePlayer.position.x,
-                minePlayer.position.y,
-                nz
-            )
-        ){
-
-            minePlayer.position.z=nz;
-
-        }
-
-    }
-
-    mineVelocityY -=
-        22*delta;
-
-    let ny =
-        minePlayer.position.y+
-        mineVelocityY*delta;
-
-    const ground =
-        getMineGround(
-            minePlayer.position.x,
-            minePlayer.position.z
-        )+1;
-
-    if(ny<=ground){
-
-        ny=ground;
-
-        mineVelocityY=0;
-
-        mineCanJump=true;
-
-    }
-    else{
-
-        mineCanJump=false;
-
-    }
-
-    minePlayer.position.y=ny;
-
-    mineCamera.rotation.order=
-        "YXZ";
-
-    mineCamera.rotation.y=
-        mineYaw;
-
-    mineCamera.rotation.x=
-        minePitch;
-
-}
-
-function mineCollides(
-    x,y,z
-){
-
-    const r=.28;
-    const h=1.8;
-
-    for(
-        let block of mineWorld
-    ){
-
-        const bx=block.position.x;
-        const by=block.position.y;
-        const bz=block.position.z;
-
-        if(
-            x+r>bx-.5 &&
-            x-r<bx+.5 &&
-            y+h/2>by-.5 &&
-            y-h/2<by+.5 &&
-            z+r>bz-.5 &&
-            z-r<bz+.5
-        ){
-
-            return true;
-
-        }
-
-    }
-
-    return false;
-
-}
-
-function getMineTarget(){
-
-    const raycaster =
-        new THREE.Raycaster();
-
-    raycaster.setFromCamera(
-        new THREE.Vector2(0,0),
-        mineCamera
-    );
-
-    const hits =
-        raycaster.intersectObjects(
-            mineWorld
-        );
-
-    if(
-        hits.length===0
-    ) return null;
-
-    if(
-        hits[0].distance>7
-    ) return null;
-
-    return hits[0];
-
-}
-
-function breakMineBlock(){
-
-    const hit =
-        getMineTarget();
-
-    if(!hit) return;
-
-    const block =
-        hit.object;
-
-    if(
-        block.position.y<=0
-    ) return;
-
-    mineScene.remove(block);
-
-    const index =
-        mineWorld.indexOf(block);
-
-    if(index!==-1)
-        mineWorld.splice(index,1);
-
-}
-
-function placeMineBlock(){
-
-    const hit =
-        getMineTarget();
-
-    if(!hit) return;
-
-    const normal =
-        hit.face.normal.clone();
-
-    normal.transformDirection(
-        hit.object.matrixWorld
-    );
-
-    const position =
-        hit.object.position.clone()
-        .add(normal);
-
-    const x =
-        Math.round(position.x);
-
-    const y =
-        Math.round(position.y);
-
-    const z =
-        Math.round(position.z);
-
-    if(
-        mineCollides(
-            x,
-            y+0.9,
-            z
-        )
-    ) return;
-
-    addMineBlock(
-        x,y,z,
-        mineSelected
-    );
-
-}
-
-function resizeMinecraft(){
-
-    if(!mineCamera ||
-       !mineRenderer)
-        return;
-
-    mineCamera.aspect =
-        window.innerWidth/
-        window.innerHeight;
-
-    mineCamera.updateProjectionMatrix();
-
-    mineRenderer.setSize(
-        window.innerWidth,
-        window.innerHeight
-    );
-
-}
-
-let mineLastTime =
-    performance.now();
-
-function mineLoop(){
-
-    if(!mineRunning)
-        return;
-
-    requestAnimationFrame(
-        mineLoop
-    );
-
-    const now =
-        performance.now();
-
-    let delta =
-        Math.min(
-            (now-mineLastTime)/1000,
-            .05
-        );
-
-    mineLastTime=now;
-
-    updateMinecraft(delta);
-
-    mineRenderer.render(
-        mineScene,
-        mineCamera
-    );
-
-}
-
-
-/* =========================================================
-   RESET MINECRAFT WHEN ENTERING AGAIN
-========================================================= */
-
-document.getElementById("mineHome")
-    .addEventListener(
-        "click",
-        () => {
-
-            mineRunning=false;
-
-        }
-    );
 
 </script>
 
