@@ -71,7 +71,7 @@ canvas {
 
 <!-- RACING MENU -->
 <div id="racingMenu" class="screen">
-    <h1>RACING GAME</h1>
+    <h1>rithik RACING GAME</h1>
 
     <p>Select Difficulty</p>
 
@@ -88,7 +88,7 @@ canvas {
 <!-- RACING GAME -->
 <div id="racingGameScreen" class="screen">
 
-    <h1>RACING GAME</h1>
+    <h1>rithik RACING GAME</h1>
 
     <div class="info">
         TIME: <span id="raceTime">0</span> seconds
@@ -106,7 +106,7 @@ canvas {
 <!-- GEOMETRY MENU -->
 <div id="geometryMenu" class="screen">
 
-    <h1>GEOMETRY DASH</h1>
+    <h1>rithik GEOMETRY DASH</h1>
 
     <p>Select Level</p>
 
@@ -121,7 +121,7 @@ canvas {
 <!-- GEOMETRY DASH -->
 <div id="geometryGameScreen" class="screen">
 
-    <h1>GEOMETRY DASH</h1>
+    <h1>rithik GEOMETRY DASH</h1>
 
     <div class="info">
         LEVEL: <span id="geoLevelText">1</span>
@@ -538,225 +538,50 @@ document.addEventListener("keydown", function(event) {
 
 
 /* =====================================================
-   GEOMETRY DASH
+   GEOMETRY DASH - OLD STYLE
+   ONLY SPIKES AND BLOCKS
 ===================================================== */
 
-const geoCanvas =
-    document.getElementById("geoCanvas");
-
-const geoCtx =
-    geoCanvas.getContext("2d");
+const geoCanvas = document.getElementById("geoCanvas");
+const geoCtx = geoCanvas.getContext("2d");
 
 let geoRunning = false;
 let geoPaused = false;
+let geoAnimation = null;
 
 let currentLevel = 1;
+let geoPlayer = {
+    worldX: 150,
+    y: 0,
+    size: 42,
+    velocityY: 0,
+    grounded: true
+};
 
-let playerWorldX = 150;
-let playerY = 500;
-
-let playerVelocityY = 0;
-
-let playerOnGround = true;
-
-let cameraX = 0;
-
-let geoSpeed = 6;
-
-let geoStartTime = 0;
-let geoElapsed = 0;
-
-let geoAnimation;
-
+let geoCamera = 0;
+let geoLastTime = 0;
+let geoSpeed = 320;
 let geoObstacles = [];
-
-let geoFinishX = 3000;
-
-
-/* Level data */
-
-const levels = [
-
-    {
-        speed: 5,
-        obstacles: [
-            [500,500,50,100],
-            [800,450,50,150],
-            [1100,500,50,100],
-            [1450,450,50,150],
-            [1800,500,50,100],
-            [2200,450,50,150]
-        ]
-    },
-
-    {
-        speed: 5.5,
-        obstacles: [
-            [450,500,50,100],
-            [650,500,50,100],
-            [900,420,50,180],
-            [1200,500,50,100],
-            [1500,450,50,150],
-            [1800,400,50,200],
-            [2150,500,50,100],
-            [2500,450,50,150]
-        ]
-    },
-
-    {
-        speed: 6,
-        obstacles: [
-            [500,500,50,100],
-            [700,450,50,150],
-            [950,400,50,200],
-            [1250,500,50,100],
-            [1450,400,50,200],
-            [1750,450,50,150],
-            [2050,350,50,250],
-            [2400,450,50,150]
-        ]
-    },
-
-    {
-        speed: 6.5,
-        obstacles: [
-            [450,450,50,150],
-            [650,450,50,150],
-            [850,400,50,200],
-            [1100,350,50,250],
-            [1400,450,50,150],
-            [1600,400,50,200],
-            [1900,350,50,250],
-            [2250,400,50,200],
-            [2550,450,50,150]
-        ]
-    },
-
-    {
-        speed: 7,
-        obstacles: [
-            [450,500,50,100],
-            [600,450,50,150],
-            [800,400,50,200],
-            [1050,500,50,100],
-            [1200,350,50,250],
-            [1500,400,50,200],
-            [1750,300,50,300],
-            [2050,400,50,200],
-            [2350,350,50,250],
-            [2700,400,50,200]
-        ]
-    },
-
-    {
-        speed: 7.5,
-        obstacles: [
-            [450,400,50,200],
-            [650,350,50,250],
-            [900,450,50,150],
-            [1100,300,50,300],
-            [1400,400,50,200],
-            [1650,350,50,250],
-            [1900,300,50,300],
-            [2200,400,50,200],
-            [2500,350,50,250],
-            [2850,400,50,200]
-        ]
-    },
-
-    {
-        speed: 8,
-        obstacles: [
-            [450,450,50,150],
-            [600,350,50,250],
-            [850,300,50,300],
-            [1100,400,50,200],
-            [1350,300,50,300],
-            [1600,350,50,250],
-            [1900,250,50,350],
-            [2200,350,50,250],
-            [2500,300,50,300],
-            [2850,350,50,250]
-        ]
-    },
-
-    {
-        speed: 8.5,
-        obstacles: [
-            [450,400,50,200],
-            [600,300,50,300],
-            [850,350,50,250],
-            [1050,250,50,350],
-            [1350,350,50,250],
-            [1550,300,50,300],
-            [1800,250,50,350],
-            [2100,350,50,250],
-            [2350,300,50,300],
-            [2650,250,50,350],
-            [3000,350,50,250]
-        ]
-    },
-
-    {
-        speed: 9,
-        obstacles: [
-            [450,350,50,250],
-            [650,250,50,350],
-            [900,300,50,300],
-            [1150,200,50,400],
-            [1450,300,50,300],
-            [1700,250,50,350],
-            [2000,200,50,400],
-            [2300,300,50,300],
-            [2600,250,50,350],
-            [2900,200,50,400]
-        ]
-    },
-
-    {
-        speed: 10,
-        obstacles: [
-            [450,300,50,300],
-            [650,200,50,400],
-            [900,250,50,350],
-            [1150,150,50,450],
-            [1450,250,50,350],
-            [1700,200,50,400],
-            [2000,150,50,450],
-            [2300,250,50,350],
-            [2600,200,50,400],
-            [2900,150,50,450],
-            [3250,250,50,350]
-        ]
-    }
-];
+let geoGround = 500;
 
 
-/* Level buttons */
+/* LEVEL BUTTONS */
 
-const levelButtons =
-    document.getElementById("levelButtons");
+const levelButtons = document.getElementById("levelButtons");
 
 for (let i = 1; i <= 10; i++) {
-
-    let button =
-        document.createElement("button");
-
-    button.textContent =
-        "Level " + i;
-
+    const button = document.createElement("button");
+    button.textContent = "LEVEL " + i;
     button.onclick = function() {
         startGeometry(i);
     };
-
     levelButtons.appendChild(button);
 }
 
 
-/* Start Geometry Dash */
+/* START */
 
 function startGeometry(level) {
-
     currentLevel = level;
 
     startGameScreen("geometryGameScreen");
@@ -764,398 +589,215 @@ function startGeometry(level) {
     geoRunning = true;
     geoPaused = false;
 
-    playerWorldX = 150;
-    playerY = 500;
+    geoSpeed = 280 + level * 18;
 
-    playerVelocityY = 0;
-    playerOnGround = true;
+    geoPlayer = {
+        worldX: 150,
+        y: 0,
+        size: 42,
+        velocityY: 0,
+        grounded: true
+    };
 
-    /*
-       CAMERA STARTS AT ZERO.
-       The character will visibly move.
-    */
+    geoCamera = 0;
+    createGeoObstacles(level);
 
-    cameraX = 0;
+    document.getElementById("geoLevelText").textContent = level;
+    document.getElementById("geoTime").textContent = "0";
 
-    geoSpeed =
-        levels[level - 1].speed;
-
-    geoObstacles =
-        levels[level - 1].obstacles;
-
-    geoFinishX =
-        geoObstacles[
-            geoObstacles.length - 1
-        ][0] + 350;
-
-    geoStartTime =
-        performance.now();
-
-    geoElapsed = 0;
-
-    document.getElementById(
-        "geoLevelText"
-    ).textContent = level;
-
-    document.getElementById(
-        "geoTime"
-    ).textContent = "0";
+    geoLastTime = performance.now();
 
     cancelAnimationFrame(geoAnimation);
-
     geometryLoop();
 }
 
 
-/* Draw background */
+function stopGeometry() {
+    geoRunning = false;
+    cancelAnimationFrame(geoAnimation);
+}
+
+
+/* OLD-STYLE RANDOM LEVELS
+   ONLY SPIKES AND BLOCKS */
+
+function createGeoObstacles(level) {
+    geoObstacles = [];
+
+    let x = 650;
+    const count = 15 + level * 4;
+
+    for (let i = 0; i < count; i++) {
+        x += 300 + Math.random() * 220 - level * 5;
+
+        const type = Math.random() < 0.65 ? "spike" : "block";
+
+        geoObstacles.push({
+            x: x,
+            type: type,
+            width: type === "spike" ? 45 : 55,
+            height: type === "spike" ? 55 : 70
+        });
+    }
+}
+
+
+/* BACKGROUND */
 
 function drawGeometryBackground() {
+    const w = geoCanvas.width;
+    const h = geoCanvas.height;
 
     geoCtx.fillStyle = "#07152b";
-
-    geoCtx.fillRect(
-        0,
-        0,
-        1000,
-        600
-    );
-
-    /*
-       Background grid
-    */
+    geoCtx.fillRect(0, 0, w, h);
 
     geoCtx.fillStyle = "#10294d";
 
-    for (
-        let x = -100 - (cameraX % 100);
-        x < 1100;
-        x += 100
-    ) {
-
-        for (
-            let y = 50;
-            y < 450;
-            y += 100
-        ) {
-
-            geoCtx.fillRect(
-                x,
-                y,
-                60,
-                60
-            );
+    for (let x = -100 - (geoCamera % 100); x < w + 100; x += 100) {
+        for (let y = 40; y < h - 120; y += 100) {
+            geoCtx.fillRect(x, y, 60, 60);
         }
     }
-
-    /*
-       Ground
-    */
 
     geoCtx.fillStyle = "#222";
-
-    geoCtx.fillRect(
-        0,
-        550,
-        1000,
-        50
-    );
+    geoCtx.fillRect(0, geoGround, w, h - geoGround);
 
     geoCtx.fillStyle = "#00ff88";
-
-    geoCtx.fillRect(
-        0,
-        550,
-        1000,
-        8
-    );
+    geoCtx.fillRect(0, geoGround, w, 8);
 }
 
 
-/* Draw obstacles */
+/* DRAW ONLY SPIKES AND BLOCKS */
 
-function drawGeometryObstacles() {
+function drawGeometry() {
+    drawGeometryBackground();
 
-    for (let obstacle of geoObstacles) {
+    for (const o of geoObstacles) {
+        const x = o.x - geoCamera;
 
-        let x =
-            obstacle[0] - cameraX;
+        if (x < -100 || x > geoCanvas.width + 100) {
+            continue;
+        }
 
-        let y =
-            obstacle[1];
+        if (o.type === "spike") {
+            const baseY = geoGround;
+            const topY = geoGround - o.height;
 
-        let width =
-            obstacle[2];
-
-        let height =
-            obstacle[3];
-
-        if (
-            x > -100 &&
-            x < 1100
-        ) {
-
-            geoCtx.fillStyle = "#e74c3c";
-
-            geoCtx.fillRect(
-                x,
-                y,
-                width,
-                height
-            );
-
-            geoCtx.fillStyle = "#ff7675";
-
-            geoCtx.fillRect(
-                x,
-                y,
-                width,
-                8
-            );
+            geoCtx.fillStyle = "#ff4757";
+            geoCtx.beginPath();
+            geoCtx.moveTo(x, baseY);
+            geoCtx.lineTo(x + o.width / 2, topY);
+            geoCtx.lineTo(x + o.width, baseY);
+            geoCtx.closePath();
+            geoCtx.fill();
 
             geoCtx.strokeStyle = "white";
-
             geoCtx.lineWidth = 2;
+            geoCtx.stroke();
+        } else {
+            const y = geoGround - o.height;
 
-            geoCtx.strokeRect(
-                x,
-                y,
-                width,
-                height
-            );
+            geoCtx.fillStyle = "#e74c3c";
+            geoCtx.fillRect(x, y, o.width, o.height);
+
+            geoCtx.fillStyle = "#ff7675";
+            geoCtx.fillRect(x, y, o.width, 8);
+
+            geoCtx.strokeStyle = "white";
+            geoCtx.lineWidth = 2;
+            geoCtx.strokeRect(x, y, o.width, o.height);
         }
     }
-}
 
+    /* PLAYER */
 
-/* Finish line */
-
-function drawFinishLine() {
-
-    let x =
-        geoFinishX - cameraX;
-
-    if (
-        x > -100 &&
-        x < 1100
-    ) {
-
-        geoCtx.fillStyle = "white";
-
-        geoCtx.fillRect(
-            x,
-            100,
-            8,
-            450
-        );
-
-        geoCtx.fillStyle = "yellow";
-
-        geoCtx.font =
-            "bold 25px Arial";
-
-        geoCtx.fillText(
-            "FINISH",
-            x - 35,
-            90
-        );
-    }
-}
-
-
-/* Draw player */
-
-function drawGeometryPlayer() {
-
-    let screenX =
-        playerWorldX - cameraX;
-
-    let size = 50;
+    const playerX = geoPlayer.worldX - geoCamera;
+    const playerY = geoGround - geoPlayer.size - geoPlayer.y;
 
     geoCtx.save();
 
     geoCtx.translate(
-        screenX + 25,
-        playerY + 25
+        playerX + geoPlayer.size / 2,
+        playerY + geoPlayer.size / 2
     );
 
-    /*
-       Rotate while jumping.
-    */
-
-    if (!playerOnGround) {
-        geoCtx.rotate(
-            playerWorldX * 0.08
-        );
+    if (!geoPlayer.grounded) {
+        geoCtx.rotate(geoPlayer.worldX * 0.08);
     }
 
-    /*
-       Character body
-    */
-
     geoCtx.fillStyle = "#00ff88";
-
     geoCtx.fillRect(
-        -25,
-        -25,
-        50,
-        50
+        -geoPlayer.size / 2,
+        -geoPlayer.size / 2,
+        geoPlayer.size,
+        geoPlayer.size
     );
 
     geoCtx.strokeStyle = "white";
-
     geoCtx.lineWidth = 3;
-
     geoCtx.strokeRect(
-        -25,
-        -25,
-        50,
-        50
+        -geoPlayer.size / 2,
+        -geoPlayer.size / 2,
+        geoPlayer.size,
+        geoPlayer.size
     );
-
-    /*
-       Eyes
-    */
 
     geoCtx.fillStyle = "#111";
-
-    geoCtx.fillRect(
-        -15,
-        -10,
-        10,
-        10
-    );
-
-    geoCtx.fillRect(
-        5,
-        -10,
-        10,
-        10
-    );
-
-    /*
-       Mouth
-    */
-
-    geoCtx.fillRect(
-        -12,
-        10,
-        24,
-        5
-    );
+    geoCtx.fillRect(-13, -9, 9, 9);
+    geoCtx.fillRect(4, -9, 9, 9);
+    geoCtx.fillRect(-11, 9, 22, 4);
 
     geoCtx.restore();
 
-    /*
-       Movement trail
-    */
+    /* FINISH */
 
-    geoCtx.fillStyle =
-        "rgba(0,255,136,0.25)";
+    const last = geoObstacles[geoObstacles.length - 1];
 
-    geoCtx.fillRect(
-        screenX - 35,
-        playerY + 15,
-        25,
-        20
-    );
-}
+    if (last) {
+        const finishX = last.x + 500 - geoCamera;
 
+        if (finishX > -50 && finishX < geoCanvas.width + 50) {
+            geoCtx.fillStyle = "white";
+            geoCtx.fillRect(finishX, 80, 6, geoGround - 80);
 
-/* Jump */
-
-function geometryJump() {
-
-    if (
-        geoRunning &&
-        !geoPaused &&
-        playerOnGround
-    ) {
-
-        playerVelocityY = -15;
-
-        playerOnGround = false;
-    }
-}
-
-
-/* Keyboard */
-
-document.addEventListener("keydown", function(event) {
-
-    if (
-        event.code === "Space" ||
-        event.key === "ArrowUp" ||
-        event.key.toLowerCase() === "w"
-    ) {
-
-        if (
-            geoRunning &&
-            !geoPaused
-        ) {
-
-            event.preventDefault();
-
-            geometryJump();
+            geoCtx.fillStyle = "yellow";
+            geoCtx.font = "bold 24px Arial";
+            geoCtx.fillText("FINISH", finishX - 30, 65);
         }
     }
-});
+}
 
 
-/* Mouse */
+/* COLLISION */
 
-geoCanvas.addEventListener(
-    "mousedown",
-    function() {
+function checkGeoCollision() {
+    const playerX = geoPlayer.worldX;
+    const playerY = geoGround - geoPlayer.size - geoPlayer.y;
 
-        geometryJump();
-    }
-);
-
-
-/* =====================================================
-   GEOMETRY COLLISION
-===================================================== */
-
-function geometryCollision() {
-
-    let size = 50;
-
-    let playerLeft =
-        playerWorldX;
-
-    let playerRight =
-        playerWorldX + size;
-
-    let playerTop =
-        playerY;
-
-    let playerBottom =
-        playerY + size;
-
-
-    for (let obstacle of geoObstacles) {
-
-        let left =
-            obstacle[0];
-
-        let top =
-            obstacle[1];
-
-        let right =
-            obstacle[0] + obstacle[2];
-
-        let bottom =
-            obstacle[1] + obstacle[3];
-
-
+    for (const o of geoObstacles) {
         if (
-            playerRight > left &&
-            playerLeft < right &&
-            playerBottom > top &&
-            playerTop < bottom
+            playerX + geoPlayer.size - 7 > o.x &&
+            playerX + 7 < o.x + o.width
         ) {
+            if (o.type === "spike") {
+                const spikeTop = geoGround - o.height;
 
-            return true;
+                if (
+                    playerY + geoPlayer.size >
+                    spikeTop + 15
+                ) {
+                    return true;
+                }
+            } else {
+                const blockTop = geoGround - o.height;
+
+                if (
+                    playerY + geoPlayer.size >
+                    blockTop
+                ) {
+                    return true;
+                }
+            }
         }
     }
 
@@ -1163,194 +805,127 @@ function geometryCollision() {
 }
 
 
-/* =====================================================
-   GEOMETRY LOOP
-===================================================== */
+/* GAME LOOP */
 
 function geometryLoop() {
-
     if (!geoRunning) {
         return;
     }
 
-    if (!geoPaused) {
+    geoAnimation = requestAnimationFrame(geometryLoop);
 
-        /*
-           TIME
-        */
+    const now = performance.now();
+    const delta = Math.min(
+        (now - geoLastTime) / 1000,
+        0.04
+    );
 
-        geoElapsed =
-            (performance.now() -
-             geoStartTime) / 1000;
+    geoLastTime = now;
 
-        document.getElementById(
-            "geoTime"
-        ).textContent =
-            Math.floor(geoElapsed);
-
-
-        /*
-           ================================================
-           CHARACTER MOVES FORWARD
-           ================================================
-        */
-
-        playerWorldX += geoSpeed;
-
-
-        /*
-           Gravity
-        */
-
-        playerVelocityY += 0.7;
-
-        playerY += playerVelocityY;
-
-
-        /*
-           Ground
-        */
-
-        if (playerY >= 500) {
-
-            playerY = 500;
-
-            playerVelocityY = 0;
-
-            playerOnGround = true;
-        }
-
-
-        /*
-           ================================================
-           CAMERA
-           ================================================
-
-           Character starts at screen X = 150.
-
-           It moves:
-
-           150
-           200
-           300
-           400
-           500
-           600
-           650
-
-           ONLY THEN does the camera start moving.
-        */
-
-        let screenX =
-            playerWorldX - cameraX;
-
-        const RIGHT_ZONE = 650;
-
-        const LEFT_ZONE = 180;
-
-
-        if (screenX > RIGHT_ZONE) {
-
-            cameraX =
-                playerWorldX -
-                RIGHT_ZONE;
-        }
-
-
-        if (screenX < LEFT_ZONE) {
-
-            cameraX =
-                Math.max(
-                    0,
-                    playerWorldX -
-                    LEFT_ZONE
-                );
-        }
-
-
-        /*
-           Draw
-        */
-
-        drawGeometryBackground();
-
-        drawGeometryObstacles();
-
-        drawFinishLine();
-
-        drawGeometryPlayer();
-
-
-        /*
-           ================================================
-           NO GAME OVER
-           ================================================
-
-           If the character hits an obstacle,
-           the level simply restarts.
-
-           There is NO "GAME OVER" screen.
-        */
-
-        if (geometryCollision()) {
-
-            startGeometry(currentLevel);
-
-            return;
-        }
-
-
-        /*
-           Finish
-        */
-
-        if (
-            playerWorldX >=
-            geoFinishX
-        ) {
-
-            /*
-               Automatically go to next level.
-            */
-
-            if (currentLevel < 10) {
-
-                startGeometry(
-                    currentLevel + 1
-                );
-
-            } else {
-
-                /*
-                   After level 10, return to
-                   the level menu.
-                */
-
-                showGeometryMenu();
-            }
-
-            return;
-        }
+    if (geoPaused) {
+        drawGeometry();
+        return;
     }
 
-    geoAnimation =
-        requestAnimationFrame(
-            geometryLoop
-        );
+    geoPlayer.worldX += geoSpeed * delta;
+
+    geoPlayer.velocityY -= 2000 * delta;
+    geoPlayer.y += geoPlayer.velocityY * delta;
+
+    if (geoPlayer.y <= 0) {
+        geoPlayer.y = 0;
+        geoPlayer.velocityY = 0;
+        geoPlayer.grounded = true;
+    }
+
+    if (geoPlayer.worldX > geoCamera + 650) {
+        geoCamera = geoPlayer.worldX - 650;
+    }
+
+    const elapsed = Math.floor(
+        (now - geoLastTime + 0) / 1000
+    );
+
+    const timeElement = document.getElementById("geoTime");
+    if (timeElement) {
+        const start = geoPlayer._startTime || now;
+        if (!geoPlayer._startTime) {
+            geoPlayer._startTime = now;
+        }
+        timeElement.textContent = Math.floor((now - geoPlayer._startTime) / 1000);
+    }
+
+    drawGeometry();
+
+    if (checkGeoCollision()) {
+        startGeometry(currentLevel);
+        return;
+    }
+
+    const last = geoObstacles[geoObstacles.length - 1];
+
+    if (
+        last &&
+        geoPlayer.worldX > last.x + 500
+    ) {
+        if (currentLevel < 10) {
+            startGeometry(currentLevel + 1);
+        } else {
+            showGeometryMenu();
+        }
+        return;
+    }
 }
 
 
-/* Pause */
+/* JUMP */
+
+function geometryJump() {
+    if (
+        geoRunning &&
+        !geoPaused &&
+        geoPlayer.grounded
+    ) {
+        geoPlayer.velocityY = 850;
+        geoPlayer.grounded = false;
+    }
+}
+
+
+geoCanvas.addEventListener(
+    "pointerdown",
+    function(event) {
+        event.preventDefault();
+        geometryJump();
+    }
+);
+
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+        if (
+            event.code === "Space" ||
+            event.code === "ArrowUp" ||
+            event.code === "KeyW"
+        ) {
+            if (geoRunning && !geoPaused) {
+                event.preventDefault();
+                geometryJump();
+            }
+        }
+    }
+);
+
 
 function pauseGeometry() {
-
     if (!geoRunning) {
         return;
     }
 
-    geoPaused =
-        !geoPaused;
+    geoPaused = !geoPaused;
 }
+
 
 </script>
 
