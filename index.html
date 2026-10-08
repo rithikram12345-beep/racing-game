@@ -518,8 +518,8 @@ document.addEventListener("keydown", function(event) {
 
         playerCar.x -= playerCar.speed;
 
-        if (playerCar.x < 105) {
-            playerCar.x = 105;
+        if (playerCar.x < 85) {
+            playerCar.x = 85;
         }
     }
 
@@ -530,8 +530,8 @@ document.addEventListener("keydown", function(event) {
 
         playerCar.x += playerCar.speed;
 
-        if (playerCar.x > 445) {
-            playerCar.x = 445;
+        if (playerCar.x > 465) {
+            playerCar.x = 465;
         }
     }
 });
@@ -553,7 +553,7 @@ let currentLevel = 1;
 let geoPlayer = {
     worldX: 150,
     y: 0,
-    size: 42,
+    size: 38,
     velocityY: 0,
     grounded: true
 };
@@ -594,7 +594,7 @@ function startGeometry(level) {
     geoPlayer = {
         worldX: 150,
         y: 0,
-        size: 42,
+        size: 38,
         velocityY: 0,
         grounded: true
     };
@@ -826,7 +826,7 @@ function geometryLoop() {
     /* Shorter jump + platform physics */
     const previousY = geoPlayer.y;
     geoPlayer.grounded = false;
-    geoPlayer.velocityY -= 2000 * delta;
+    geoPlayer.velocityY -= 2300 * delta;
     geoPlayer.y += geoPlayer.velocityY * delta;
 
     /* Ground */
