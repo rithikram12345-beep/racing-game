@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>rithik Games</title>
+<title>Rithik Games</title>
 
 <style>
 * {
@@ -63,7 +63,7 @@ canvas {
 
 <!-- HOME -->
 <div id="homeScreen" class="screen active">
-    <h1>rithik GAMES</h1>
+    <h1>RITHIK GAMES</h1>
     <button onclick="showRacingMenu()">Racing Game</button>
     <button onclick="showGeometryMenu()">Geometry Dash</button>
 </div>
@@ -71,7 +71,7 @@ canvas {
 
 <!-- RACING MENU -->
 <div id="racingMenu" class="screen">
-    <h1>rithik RACING GAME</h1>
+    <h1>RITHIK RACING GAME</h1>
 
     <p>Select Difficulty</p>
 
@@ -88,7 +88,7 @@ canvas {
 <!-- RACING GAME -->
 <div id="racingGameScreen" class="screen">
 
-    <h1>rithik RACING GAME</h1>
+    <h1>RITHIK RACING GAME</h1>
 
     <div class="info">
         TIME: <span id="raceTime">0</span> seconds
@@ -106,7 +106,7 @@ canvas {
 <!-- GEOMETRY MENU -->
 <div id="geometryMenu" class="screen">
 
-    <h1>rithik GEOMETRY DASH</h1>
+    <h1>RITHIK GEOMETRY DASH</h1>
 
     <p>Select Level</p>
 
@@ -121,7 +121,7 @@ canvas {
 <!-- GEOMETRY DASH -->
 <div id="geometryGameScreen" class="screen">
 
-    <h1>rithik GEOMETRY DASH</h1>
+    <h1>RITHIK GEOMETRY DASH</h1>
 
     <div class="info">
         LEVEL: <span id="geoLevelText">1</span>
@@ -789,14 +789,8 @@ function checkGeoCollision() {
                     return true;
                 }
             } else {
-                const blockTop = geoGround - o.height;
-
-                if (
-                    playerY + geoPlayer.size >
-                    blockTop
-                ) {
-                    return true;
-                }
+                /* Blocks are platforms, not crash obstacles. */
+                continue;
             }
         }
     }
@@ -829,13 +823,41 @@ function geometryLoop() {
 
     geoPlayer.worldX += geoSpeed * delta;
 
+    /* Shorter jump + platform physics */
+    const previousY = geoPlayer.y;
+    geoPlayer.grounded = false;
     geoPlayer.velocityY -= 2000 * delta;
     geoPlayer.y += geoPlayer.velocityY * delta;
 
+    /* Ground */
     if (geoPlayer.y <= 0) {
         geoPlayer.y = 0;
         geoPlayer.velocityY = 0;
         geoPlayer.grounded = true;
+    }
+
+    /* Blocks are platforms: the player can stand on their top. */
+    if (geoPlayer.velocityY <= 0) {
+        for (const o of geoObstacles) {
+            if (o.type !== "block") continue;
+
+            const overlapsX =
+                geoPlayer.worldX + geoPlayer.size - 7 > o.x &&
+                geoPlayer.worldX + 7 < o.x + o.width;
+
+            const platformY = o.height - geoPlayer.size;
+
+            if (
+                overlapsX &&
+                previousY >= platformY &&
+                geoPlayer.y <= platformY
+            ) {
+                geoPlayer.y = platformY;
+                geoPlayer.velocityY = 0;
+                geoPlayer.grounded = true;
+                break;
+            }
+        }
     }
 
     if (geoPlayer.worldX > geoCamera + 650) {
@@ -886,7 +908,7 @@ function geometryJump() {
         !geoPaused &&
         geoPlayer.grounded
     ) {
-        geoPlayer.velocityY = 850;
+        geoPlayer.velocityY = 600;
         geoPlayer.grounded = false;
     }
 }
@@ -930,4 +952,4 @@ function pauseGeometry() {
 </script>
 
 </body>
-</html>
+</html
